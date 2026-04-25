@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 776 (`x = y * (z * ((z * x) * z))`) implies Equation 629 (`x = x * (y * ((x * x) * x))`).",
+  "lean_statement": "theorem problem_normal_0652\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y z : G, x = (op y (op z (op (op z x) z)))) :\n    ∀ x y z : G, x = (op x (op y (op (op x x) x)))",
+  "proof": "",
+  "source_problem_id": "normal_0652",
+  "source_index": 652,
+  "difficulty": "normal",
+  "eq1_id": 776,
+  "eq2_id": 629,
+  "equation1": "x = y * (z * ((z * x) * z))",
+  "equation2": "x = x * (y * ((x * x) * x))",
+  "answer": true
+}

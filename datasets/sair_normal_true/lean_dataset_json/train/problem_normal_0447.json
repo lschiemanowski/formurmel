@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 181 (`x = (y * y) * (y * z)`) implies Equation 886 (`x = y * ((x * y) * (z * y))`).",
+  "lean_statement": "theorem problem_normal_0447\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y z : G, x = (op (op y y) (op y z))) :\n    ∀ x y z : G, x = (op y (op (op x y) (op z y)))",
+  "proof": "",
+  "source_problem_id": "normal_0447",
+  "source_index": 447,
+  "difficulty": "normal",
+  "eq1_id": 181,
+  "eq2_id": 886,
+  "equation1": "x = (y * y) * (y * z)",
+  "equation2": "x = y * ((x * y) * (z * y))",
+  "answer": true
+}

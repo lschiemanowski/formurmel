@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 3173 (`x = (((y * y) * z) * w) * z`) implies Equation 443 (`x = x * (y * (y * (z * y)))`).",
+  "lean_statement": "theorem problem_normal_0930\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y z w : G, x = (op (op (op (op y y) z) w) z)) :\n    ∀ x y z w : G, x = (op x (op y (op y (op z y))))",
+  "proof": "",
+  "source_problem_id": "normal_0930",
+  "source_index": 930,
+  "difficulty": "normal",
+  "eq1_id": 3173,
+  "eq2_id": 443,
+  "equation1": "x = (((y * y) * z) * w) * z",
+  "equation2": "x = x * (y * (y * (z * y)))",
+  "answer": true
+}

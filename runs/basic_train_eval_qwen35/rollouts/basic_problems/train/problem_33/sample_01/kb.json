@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_33": {
+      "id": "problem_33",
+      "type": "statement",
+      "natural_language": "Dini's theorem on an interval: monotone pointwise convergence of continuous functions to a continuous",
+      "lean_name": "tendstoUniformlyOn_of_monotone_continuousOn",
+      "lean": "import Mathlib.Analysis.SpecialFunctions.Exp\nimport Mathlib.Topology.MetricSpace.Basic\nimport Mathlib.Topology.UniformSpace.UniformConvergence\nimport Mathlib.Data.Real.Basic\nimport Mathlib.Topology.Order.IsLUB\n\nopen scoped Topology\nopen Filter\nopen Set\nopen Metric\nopen Uniform\nopen Uniformity\n\ntheorem tendstoUniformlyOn_of_monotone_continuousOn\n    (f_n : Nat → Real → Real) (f : Real → Real) (a b : Real)\n    (hmono : ∀ x ∈ Set.Icc a b, Monotone (fun n => f_n n x))\n    (hcont : ∀ n, ContinuousOn (f_n n) (Set.Icc a b))\n    (hcont_lim : ContinuousOn f (Set.Icc a b))\n    (hpt : ∀ x ∈ Set.Icc a b, Tendsto (fun n => f_n n x) atTop (nhds (f x))) :\n    TendstoUniformlyOn (fun n x => f_n n x) f atTop (Set.Icc a b) := by\n  intro u hu\n  have h_basis : (𝓤 ℝ).HasBasis (fun ε : ℝ => 0 < ε) fun ε => { p : ℝ × ℝ | dist p.1 p.2 < ε} := by\n    exact uniformity_basis_dist\n  have h : ∃ ε > 0, { p : ℝ × ℝ | dist p.1 p.2 < ε } ⊆ u := by\n    have h_mem : (u ∈ 𝓤 ℝ) := hu\n    have h_basis : (𝓤 ℝ).HasBasis (fun ε : ℝ => 0 < ε) fun ε => { p : ℝ × ℝ | dist p.1 p.2 < ε} := h_basis\n    have h_exists : ∃ ε > 0, { p : ℝ × ℝ | dist p.1 p.2 < ε } ⊆ u := by\n      have h_iff : u ∈ 𝓤 ℝ ↔ ∃ ε, 0 < ε ∧ {p : ℝ × ℝ | dist p.1 p.2 < ε} ⊆ u := by\n        rw [h_basis.mem_iff']\n      rw [h_iff] at h_mem\n      exact h_mem\n    exact h_exists\n  obtain ⟨ε, hε_pos, hε_ball⟩ := h\n  \n  have h_compact : IsCompact (Set.Icc a b) := by\n    exact ConditionallyCompleteLinearOrder.isCompact_Icc a b\n  \n  have h_unif : ∀ᶠ n in atTop, ∀ x ∈ Set.Icc a b, dist (f x) (f_n n x) < ε := by\n    sorry\n  \n  have h_final : ∀ᶠ n in atTop, ∀ x, x ∈ Set.Icc a b → (f x, f_n n x) ∈ u := by\n    sorry\n  \n  exact h_final",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": false,
+      "error": "Lean compilation uses sorry",
+      "natural_language_proof": "limit on `[a,b]` is uniform.\n\nProof: fix `eps > 0` and let `K = [a,b]`. For each `n`, set\n`U_n = {x in K | f x - f_n n x < eps}`. Since `f` and `f_n n` are continuous on `K`, each `U_n` is\nopen in `K`. Monotonicity in `n` implies `U_n ⊆ U_{n+1}`. Also pointwise convergence implies that\nfor every `x ∈ K` we have `f_n n x -> f x`, so eventually `f x - f_n n x < eps`, hence\n`⋃ n, U_n = K`.\nBecause `K` is compact, an increasing open cover has a single set that already covers: there is\n`N` with `U_N = K`. Thus for all `x ∈ K`, `0 ≤ f x - f_n N x < eps`, which is exactly uniform\nconvergence on `K`.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_33"
+  ]
+}

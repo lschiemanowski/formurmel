@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 2521 (`x = (y * ((x * z) * z)) * x`) implies Equation 3232 (`x = (((y * z) * w) * y) * x`).",
+  "lean_statement": "theorem problem_normal_0549\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y z w : G, x = (op (op y (op (op x z) z)) x)) :\n    ∀ x y z w : G, x = (op (op (op (op y z) w) y) x)",
+  "proof": "",
+  "source_problem_id": "normal_0549",
+  "source_index": 549,
+  "difficulty": "normal",
+  "eq1_id": 2521,
+  "eq2_id": 3232,
+  "equation1": "x = (y * ((x * z) * z)) * x",
+  "equation2": "x = (((y * z) * w) * y) * x",
+  "answer": true
+}

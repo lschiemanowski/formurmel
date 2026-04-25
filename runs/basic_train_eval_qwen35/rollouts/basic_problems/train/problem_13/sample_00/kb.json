@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_13": {
+      "id": "problem_13",
+      "type": "statement",
+      "natural_language": "If `f` and `g` commute, then `ker(f)` and `range(f)` are invariant under `g`.",
+      "lean_name": "ker_range_invtSubmodule_of_commute",
+      "lean": "theorem ker_range_invtSubmodule_of_commute\n    {K V : Type*} [CommSemiring K] [AddCommMonoid V] [Module K V]\n    (f g : Module.End K V)\n    (hfg : f * g = g * f) :\n    LinearMap.ker f ∈ g.invtSubmodule ∧ LinearMap.range f ∈ g.invtSubmodule",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": true,
+      "error": null,
+      "natural_language_proof": "Proof: assume `f g = g f`. For the kernel, let `x ∈ ker f`, so `f x = 0`. Then\n`f (g x) = (f g) x = (g f) x = g (f x) = 0`, hence `g x ∈ ker f`.\nFor the range, take `y ∈ range f`, so `y = f x` for some `x`. Then\n`g y = g (f x) = (g f) x = (f g) x = f (g x)`, which lies again in `range f`.",
+      "lean_proof": "by\n  constructor\n  · -- Prove LinearMap.ker f ∈ g.invtSubmodule\n    have h₁ : LinearMap.ker f ≤ Submodule.comap g (LinearMap.ker f) := by\n      intro x hx\n      have h₂ : f (g x) = 0 := by\n        calc\n          f (g x) = (f * g) x := by\n            rw [Module.End.mul_apply]\n          _ = (g * f) x := by\n            rw [hfg]\n          _ = g (f x) := by\n            rw [Module.End.mul_apply]\n          _ = g 0 := by\n            rw [hx]\n          _ = 0 := by simp\n      exact h₂\n    exact h₁\n  · -- Prove LinearMap.range f ∈ g.invtSubmodule\n    have h₂ : LinearMap.range f ≤ Submodule.comap g (LinearMap.range f) := by\n      intro y hy\n      rcases hy with ⟨x, rfl⟩\n      use g x\n      have h₃ : (f * g) x = f (g x) := by\n        rw [Module.End.mul_apply]\n      have h₄ : (g * f) x = g (f x) := by\n        rw [Module.End.mul_apply]\n      have h₅ : (f * g) x = (g * f) x := by\n        rw [hfg]\n      calc\n        f (g x) = (f * g) x := by rw [h₃]\n        _ = (g * f) x := by rw [h₅]\n        _ = g (f x) := by rw [h₄]\n    exact h₂",
+      "verified": true,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_13"
+  ]
+}

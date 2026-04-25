@@ -1,0 +1,5 @@
+{
+  "statement": "If a continuous function on `[0,1]` has integral `0`, then it vanishes at some point.",
+  "lean_statement": "theorem exists_zero_of_interval_integral_eq_zero\n    (f : Real → Real) (hf : ContinuousOn f (Set.Icc (0 : Real) 1))\n    (hint : ∫ x in (0 : Real)..1, f x = 0) :\n    ∃ x ∈ Set.Icc (0 : Real) 1, f x = 0",
+  "proof": "Proof: assume for contradiction that `f x ≠ 0` for all `x ∈ [0,1]`. By continuity on the connected\nset `[0,1]`, the function has a constant sign there: either `f > 0` everywhere or `f < 0` everywhere.\nIn the first case the integral over `[0,1]` is positive, and in the second case it is negative.\nEither way it cannot be `0`, contradicting `hint`. Hence there exists `x ∈ [0,1]` with `f x = 0`."
+}

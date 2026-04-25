@@ -1,0 +1,5 @@
+{
+  "statement": "There exists a surjective but not injective linear endomorphism of `Real^Nat`.",
+  "lean_statement": "theorem exists_surjective_not_injective_endomorphism_real_sequences :\n    ∃ f : (Nat → Real) →ₗ[Real] (Nat → Real),\n      Function.Surjective f ∧ ¬ Function.Injective f",
+  "proof": "Proof: take the left shift `f` defined by `(f x) n = x (n+1)`. This map is linear. It is\nsurjective: given `y`, define `x 0 = 0` and `x (n+1) = y n`; then `f x = y`. It is not injective\nsince changing `x 0` does not change `f x`, so for instance the sequences `x` and `x'` with\n`x 0 = 0`, `x' 0 = 1`, and `x (n+1) = x' (n+1)` for all `n` satisfy `x ≠ x'` but `f x = f x'`."
+}

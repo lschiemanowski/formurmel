@@ -1,0 +1,5 @@
+{
+  "statement": "A hyperplane (codimension one submodule) is the kernel of a linear functional.",
+  "lean_statement": "theorem exists_ker_of_codim_one\n    {K V : Type*} [Field K] [AddCommGroup V] [Module K V] [FiniteDimensional K V]\n    (U : Submodule K V) (hU : Module.finrank K (V ⧸ U) = 1) :\n    ∃ l : V →ₗ[K] K, LinearMap.ker l = U",
+  "proof": "Proof: let `π : V → V ⧸ U` be the quotient map. The assumption says `V ⧸ U` is 1-dimensional, so we\ncan choose a linear isomorphism `e : V ⧸ U ≃ₗ[K] K` (pick a nonzero vector in the quotient as a\nbasis). Then `l := e ∘ₗ π : V →ₗ[K] K` is a linear functional. Its kernel is exactly `U`, since\n`π` has kernel `U` and `e` is injective."
+}

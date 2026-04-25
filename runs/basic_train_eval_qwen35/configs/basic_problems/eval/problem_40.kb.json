@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_40": {
+      "id": "problem_40",
+      "type": "statement",
+      "natural_language": "In a finite set, the orbit of a point under a self-map is eventually periodic.",
+      "lean_name": "exists_iterate_eq_of_finite",
+      "lean": "theorem exists_iterate_eq_of_finite\n    {S : Type*} [Fintype S] (f : S → S) (x : S) :\n    ∃ m n : Nat, m < n ∧ Nat.iterate f m x = Nat.iterate f n x",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof: let `N = Fintype.card S`. Consider the `N+1` elements\n`x, f x, f^2 x, ..., f^N x`. Since `S` has only `N` elements, two of these must be equal by the\npigeonhole principle: there exist `m < n ≤ N` with `f^m x = f^n x`. This is exactly the claimed\neventual periodicity.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_40"
+  ]
+}

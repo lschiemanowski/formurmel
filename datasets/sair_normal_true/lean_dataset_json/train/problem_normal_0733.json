@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 717 (`x = y * (y * ((y * y) * y))`) implies Equation 2450 (`x = (x * ((x * y) * y)) * y`).",
+  "lean_statement": "theorem problem_normal_0733\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y : G, x = (op y (op y (op (op y y) y)))) :\n    ∀ x y : G, x = (op (op x (op (op x y) y)) y)",
+  "proof": "",
+  "source_problem_id": "normal_0733",
+  "source_index": 733,
+  "difficulty": "normal",
+  "eq1_id": 717,
+  "eq2_id": 2450,
+  "equation1": "x = y * (y * ((y * y) * y))",
+  "equation2": "x = (x * ((x * y) * y)) * y",
+  "answer": true
+}

@@ -1,0 +1,5 @@
+{
+  "statement": "A continuously differentiable function on `[a,b]` is Lipschitz on `[a,b]`.",
+  "lean_statement": "theorem exists_lipschitzOnWith_of_contDiffOn\n    (f : Real → Real) (a b : Real) (hf : ContDiffOn Real 1 f (Set.Icc a b)) :\n    ∃ L : NNReal, LipschitzOnWith L f (Set.Icc a b)",
+  "proof": "Proof: since `f` is `C^1` on the compact interval `[a,b]`, its derivative `f'` is continuous there,\nhence bounded: let `M = sup_{x ∈ [a,b]} |f' x|`. For any `x,y ∈ [a,b]`, the mean value theorem gives\n`|f x - f y| ≤ M * |x - y|`. Thus `f` is Lipschitz on `[a,b]` with Lipschitz constant `M`."
+}

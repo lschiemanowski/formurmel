@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_36": {
+      "id": "problem_36",
+      "type": "statement",
+      "natural_language": "If a Cauchy sequence has a convergent subsequence, then the whole sequence converges.",
+      "lean_name": "tendsto_of_cauchySeq_of_subseq_tendsto",
+      "lean": "theorem tendsto_of_cauchySeq_of_subseq_tendsto\n    {X : Type*} [PseudoMetricSpace X]\n    (u : Nat → X) (hu : CauchySeq u)\n    (phi : Nat → Nat) (hphi : StrictMono phi)\n    (l : X) (hsub : Tendsto (fun n => u (phi n)) atTop (nhds l)) :\n    Tendsto u atTop (nhds l)",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof: let `eps > 0`. Since `u` is Cauchy, there exists `N` such that for all `m,n ≥ N`,\n`dist (u m) (u n) < eps/2`. Since the subsequence `u (phi k)` tends to `l`, choose `k` large enough\nso that `phi k ≥ N` and `dist (u (phi k)) l < eps/2`. Then for every `n ≥ N` we have\n`dist (u n) l ≤ dist (u n) (u (phi k)) + dist (u (phi k)) l < eps/2 + eps/2 = eps`,\nso `u n → l`.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_36"
+  ]
+}

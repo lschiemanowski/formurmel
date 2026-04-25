@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 600 (`x = y * (z * (w * (z * z)))`) implies Equation 250 (`x = (y * (z * w)) * x`).",
+  "lean_statement": "theorem problem_normal_0160\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y z w : G, x = (op y (op z (op w (op z z))))) :\n    ∀ x y z w : G, x = (op (op y (op z w)) x)",
+  "proof": "",
+  "source_problem_id": "normal_0160",
+  "source_index": 160,
+  "difficulty": "normal",
+  "eq1_id": 600,
+  "eq2_id": 250,
+  "equation1": "x = y * (z * (w * (z * z)))",
+  "equation2": "x = (y * (z * w)) * x",
+  "answer": true
+}

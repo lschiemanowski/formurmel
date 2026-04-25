@@ -1,0 +1,5 @@
+{
+  "statement": "For a basis, injectivity of `f` is equivalent to linear independence of `f` on the basis vectors.",
+  "lean_statement": "theorem injective_iff_linearIndependent_of_isBasis\n    {K V : Type*} [Field K] [AddCommGroup V] [Module K V]\n    {n : Nat} (v : Fin n → V)\n    (hv : LinearIndependent K v ∧ Submodule.span K (Set.range v) = ⊤)\n    (f : V →ₗ[K] V) :\n    Function.Injective f ↔ LinearIndependent K (fun i => f (v i))",
+  "proof": "Proof: assume `f` is injective. Then a linear relation `∑ c_i • f(v i) = 0` can be rewritten as\n`f(∑ c_i • v i) = 0`. Injectivity forces `∑ c_i • v i = 0`, and since the `v i` are linearly\nindependent, all `c_i = 0`. Hence `f(v i)` are linearly independent.\n\nConversely, assume `f(v i)` are linearly independent. If `f x = 0`, write `x` as a linear\ncombination of the basis vectors `v i` (since they span `V`). Applying `f` gives a relation among\nthe `f(v i)`, so all coefficients are `0`, hence `x = 0`. Thus `ker f = {0}` and `f` is injective."
+}

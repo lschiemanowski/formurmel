@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_70": {
+      "id": "problem_70",
+      "type": "statement",
+      "natural_language": "Replacing successive vectors by differences preserves being a basis.",
+      "lean_name": "basis_iff_basis_of_diff",
+      "lean": "theorem basis_iff_basis_of_diff\n    {K V : Type*} [Field K] [AddCommGroup V] [Module K V]\n    {n : Nat} (v : Fin n → V) :\n    let w : Fin n → V := fun i =>\n      if h : (i : ℕ) + 1 < n then\n        v i - v ⟨(i : ℕ) + 1, h⟩\n      else\n        v i\n    (LinearIndependent K v ∧ Submodule.span K (Set.range v) = ⊤) ↔\n    (LinearIndependent K w ∧ Submodule.span K (Set.range w) = ⊤)",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof: define `w : Fin n → V` by `w i = v i - v (i+1)` when `i+1 < n`, and `w i = v i` for the last\nindex. The vectors `w` are obtained from `v` by an invertible upper-triangular change of coordinates\nwith diagonal entries `1`. Therefore the linear spans of `v` and `w` agree, and `w` is linearly\nindependent iff `v` is. Hence `v` is a basis (linearly independent and spanning) iff `w` is.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_70"
+  ]
+}

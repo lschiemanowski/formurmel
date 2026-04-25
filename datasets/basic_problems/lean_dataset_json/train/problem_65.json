@@ -1,0 +1,5 @@
+{
+  "statement": "An ideal is radical iff the quotient ring is reduced.",
+  "lean_statement": "theorem ideal_isRadical_iff_quotient_isReduced\n    {R : Type*} [CommRing R] (I : Ideal R) :\n    I.IsRadical ↔ IsReduced (R ⧸ I)",
+  "proof": "Proof: write `π : R → R ⧸ I` for the quotient map. Suppose `I` is radical. If `x : R ⧸ I` is\nnilpotent, say `x^n = 0`, pick a representative `r` with `x = π r`. Then `0 = x^n = π (r^n)`, so\n`r^n ∈ I`. Since `I` is radical, `r ∈ I`, hence `x = 0`. Thus `R ⧸ I` has no nonzero nilpotents,\nso it is reduced.\n\nConversely, assume `R ⧸ I` is reduced. If `r^n ∈ I`, then `π(r)^n = 0` in the quotient, so by\nreducedness `π(r) = 0`, i.e. `r ∈ I`. This is exactly that `I` is radical."
+}

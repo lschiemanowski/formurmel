@@ -1,0 +1,5 @@
+{
+  "statement": "An operator is invertible iff its adjoint is invertible (here for `E →L[𝕜] E` via `star`).",
+  "lean_statement": "theorem isUnit_iff_star_isUnit\n    {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]\n    [CompleteSpace E]\n    (T : E →L[𝕜] E) :\n    IsUnit T ↔ IsUnit (star T)",
+  "proof": "Proof: if `T` is a unit, choose `S` with `T * S = 1` and `S * T = 1`. Taking `star` and using that\n`star` reverses multiplication and fixes `1`, we get `(star S) * (star T) = 1` and\n`(star T) * (star S) = 1`. Thus `star T` is a unit with inverse `star S`.\nConversely, if `star T` is a unit, apply the same argument to `star (star T) = T`."
+}

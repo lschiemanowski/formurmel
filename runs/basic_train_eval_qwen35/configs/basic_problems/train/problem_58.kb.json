@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_58": {
+      "id": "problem_58",
+      "type": "statement",
+      "natural_language": "For a finite-dimensional space, the natural map to the double dual is an isomorphism.",
+      "lean_name": "nonempty_linearEquiv_doubleDual_of_finiteDimensional",
+      "lean": "theorem nonempty_linearEquiv_doubleDual_of_finiteDimensional\n    {K V : Type*} [Field K] [AddCommGroup V] [Module K V] [FiniteDimensional K V] :\n    Nonempty (V ≃ₗ[K] Module.Dual K (Module.Dual K V))",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof: choose a basis of `V`, so `V ≃ K^n`. For `K^n` the evaluation map into the double dual is an\nisomorphism (a linear functional is determined by its values on the standard basis), and the\nstatement is preserved by linear equivalence. Transporting this isomorphism back along the chosen\nbasis gives a linear equivalence `V ≃ₗ[K] Module.Dual K (Module.Dual K V)`.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_58"
+  ]
+}

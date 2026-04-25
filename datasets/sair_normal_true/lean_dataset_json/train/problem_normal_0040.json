@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 720 (`x = y * (y * ((y * z) * y))`) implies Equation 3177 (`x = (((y * z) * x) * x) * y`).",
+  "lean_statement": "theorem problem_normal_0040\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y z : G, x = (op y (op y (op (op y z) y)))) :\n    ∀ x y z : G, x = (op (op (op (op y z) x) x) y)",
+  "proof": "",
+  "source_problem_id": "normal_0040",
+  "source_index": 40,
+  "difficulty": "normal",
+  "eq1_id": 720,
+  "eq2_id": 3177,
+  "equation1": "x = y * (y * ((y * z) * y))",
+  "equation2": "x = (((y * z) * x) * x) * y",
+  "answer": true
+}

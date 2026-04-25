@@ -1,0 +1,5 @@
+{
+  "statement": "For a 2x2 matrix over a commutative ring, `A^2 - (tr A) • A + (det A) • I = 0`.",
+  "lean_statement": "theorem matrix_2x2_cayley_hamilton\n    {R : Type*} [CommRing R] (A : Matrix (Fin 2) (Fin 2) R) :\n    A ^ 2 - (Matrix.trace A) • A + (Matrix.det A) • (1 : Matrix (Fin 2) (Fin 2) R) = 0",
+  "proof": "Proof: write `A = [[a, b], [c, d]]`. Then `trace A = a + d` and `det A = a*d - b*c`.\nA direct computation gives\n`A^2 = [[a^2 + b*c, b*(a+d)], [c*(a+d), d^2 + b*c]]` and\n`(trace A) • A = (a+d) • [[a, b], [c, d]] = [[a*(a+d), b*(a+d)], [c*(a+d), d*(a+d)]]`.\nSubtracting, the off-diagonal entries cancel, and the diagonal entries become `b*c - a*d`.\nAdding `(det A) • I = (a*d - b*c) • I` then makes every entry `0`, so\n`A^2 - (trace A) • A + (det A) • I = 0`."
+}

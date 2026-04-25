@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 193 (`x = (y * z) * (y * w)`) implies Equation 558 (`x = y * (z * (y * (y * x)))`).",
+  "lean_statement": "theorem problem_normal_0983\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y z w : G, x = (op (op y z) (op y w))) :\n    ∀ x y z w : G, x = (op y (op z (op y (op y x))))",
+  "proof": "",
+  "source_problem_id": "normal_0983",
+  "source_index": 983,
+  "difficulty": "normal",
+  "eq1_id": 193,
+  "eq2_id": 558,
+  "equation1": "x = (y * z) * (y * w)",
+  "equation2": "x = y * (z * (y * (y * x)))",
+  "answer": true
+}

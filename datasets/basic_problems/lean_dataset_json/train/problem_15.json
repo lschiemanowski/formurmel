@@ -1,0 +1,5 @@
+{
+  "statement": "Binomial identity: `∑_{k=0}^n (n choose k) = 2^n`.",
+  "lean_statement": "theorem sum_range_choose_eq_pow_two (n : ℕ) :\n    (∑ k ∈ Finset.range (n + 1), Nat.choose n k) = 2 ^ n",
+  "proof": "Proof: apply the binomial theorem to `(1 + 1)^n`. It gives\n`(1 + 1)^n = ∑_{k=0}^n (n choose k) 1^k 1^(n-k) = ∑_{k=0}^n (n choose k)`.\nSince `(1 + 1)^n = 2^n`, the desired identity follows."
+}

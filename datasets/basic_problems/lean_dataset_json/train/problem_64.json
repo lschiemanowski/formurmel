@@ -1,0 +1,5 @@
+{
+  "statement": "A finite integral domain is a field.",
+  "lean_statement": "theorem isField_of_finite_domain\n    {R : Type*} [CommRing R] [IsDomain R] [Finite R] :\n    IsField R",
+  "proof": "Proof: let `a ≠ 0`. Consider the map `m_a : R → R`, `x ↦ a*x`. In an integral domain this map is\ninjective: if `a*x = a*y` then `a*(x-y) = 0`, hence `x = y`. Since `R` is finite, an injective map\n`R → R` is also surjective, so `1` lies in its range: there exists `b` with `a*b = 1`. Thus every\nnonzero element has a multiplicative inverse, so `R` is a field."
+}

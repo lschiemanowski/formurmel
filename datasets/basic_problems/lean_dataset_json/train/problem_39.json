@@ -1,0 +1,5 @@
+{
+  "statement": "If `∑ ‖a n‖` is finite, then `a n → 0`.",
+  "lean_statement": "theorem tendsto_zero_of_summable_norm\n    {E : Type*} [NormedAddCommGroup E]\n    (a : Nat → E) (h : Summable (fun n => ‖a n‖)) :\n    Tendsto a atTop (nhds 0)",
+  "proof": "Proof: since `∑ ‖a n‖` converges, its tails go to `0`. Given `eps > 0`, choose `N` such that\n`∑_{k ≥ N} ‖a k‖ < eps`. Then for any `n ≥ N` we have `‖a n‖ ≤ ∑_{k ≥ n} ‖a k‖ ≤ ∑_{k ≥ N} ‖a k‖ < eps`.\nThus `‖a n‖ → 0`, and therefore `a n → 0`."
+}

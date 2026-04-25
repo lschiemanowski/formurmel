@@ -1,0 +1,5 @@
+{
+  "statement": "Over a field of characteristic zero, if `p' = 0` then `p` is constant.",
+  "lean_statement": "theorem polynomial_eq_C_of_derivative_eq_zero\n    {K : Type*} [Field K] [CharZero K] (p : Polynomial K)\n    (hp : p.derivative = 0) :\n    ∃ c : K, p = Polynomial.C c",
+  "proof": "Proof: write `p = ∑ c_n X^n`. Then `p' = ∑ (n+1) * c_{n+1} * X^n`. If `p' = 0`, all its\ncoefficients are `0`, so for every `n` we have `(n+1) * c_{n+1} = 0`. In characteristic zero,\n`n+1` is a nonzero scalar, hence invertible, so this forces `c_{n+1} = 0` for all `n`. Thus all\ncoefficients of degree `≥ 1` vanish and `p` is constant, i.e. `p = C c_0`."
+}

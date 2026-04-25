@@ -1,0 +1,5 @@
+{
+  "statement": "If there exists an orthonormal basis consisting of eigenvectors of `T`, then `T` is normal",
+  "lean_statement": "theorem isStarNormal_of_orthonormal_eigenbasis\n    {𝕜 E ι : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [Fintype ι]\n    [CompleteSpace E]\n    (T : E →L[𝕜] E)\n    (b : OrthonormalBasis ι 𝕜 E)\n    (hb : ∀ i, ∃ μ : 𝕜, T (b i) = μ • b i) :\n    IsStarNormal T",
+  "proof": "(i.e. it commutes with its adjoint, formalized as `IsStarNormal T`).\n\nProof: choose an orthonormal basis `b` and scalars `μ i` with `T (b i) = μ i • b i`. In this basis,\n`T` is diagonal: it sends each basis vector to a scalar multiple of itself. Using the defining\nproperty of the adjoint and orthonormality, one checks that `T† (b i) = conj (μ i) • b i`, so `T†`\nis also diagonal in the same basis. Two diagonal operators (equivalently, diagonal matrices) commute,\nso `T ∘ T† = T† ∘ T`. Hence `T` is normal."
+}

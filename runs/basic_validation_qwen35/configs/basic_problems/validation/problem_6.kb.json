@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_6": {
+      "id": "problem_6",
+      "type": "statement",
+      "natural_language": "The sum of the first `n` cubes is `((n (n + 1)) / 2)^2`.",
+      "lean_name": "sum_range_cubes",
+      "lean": "theorem sum_range_cubes (n : ℕ) :\n    (∑ k ∈ Finset.range (n + 1), k ^ 3) = ((n * (n + 1)) / 2) ^ 2",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof (by induction on `n`): for `n = 0` both sides are `0`. Assume\n`∑_{k=0}^n k^3 = ((n*(n+1))/2)^2`. Then\n`∑_{k=0}^{n+1} k^3 = ((n*(n+1))/2)^2 + (n+1)^3`.\nFactor out `(n+1)^2` and simplify:\n`((n*(n+1))/2)^2 + (n+1)^3 = (n+1)^2 (n^2/4 + (n+1)) = (n+1)^2 (n+2)^2 / 4`,\nwhich is `(((n+1)*(n+2))/2)^2`. This is exactly the desired formula at `n+1`.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_6"
+  ]
+}

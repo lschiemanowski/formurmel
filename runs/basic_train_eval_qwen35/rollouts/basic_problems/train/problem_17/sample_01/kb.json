@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_17": {
+      "id": "problem_17",
+      "type": "statement",
+      "natural_language": "A subgroup of index `2` is normal.",
+      "lean_name": "subgroup_normal_of_index_eq_two",
+      "lean": "theorem subgroup_normal_of_index_eq_two {G : Type*} [Group G] (H : Subgroup G) (hH : H.index = 2) : H.Normal",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": true,
+      "error": null,
+      "natural_language_proof": "Proof: since `H.index = 2`, there are exactly two left cosets of `H`: namely `H` itself and the\nother coset `gH` for any `g ∉ H`. The same holds for right cosets. For any `g`, if `g ∈ H` then\n`gH = H = Hg`. If `g ∉ H`, then `gH` is the unique left coset different from `H`, and `Hg` is the\nunique right coset different from `H`, so necessarily `gH = Hg`. Thus `gH = Hg` for all `g`, which\nis exactly normality.",
+      "lean_proof": "by\n  exact Subgroup.normal_of_index_eq_two hH",
+      "verified": true,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_17"
+  ]
+}

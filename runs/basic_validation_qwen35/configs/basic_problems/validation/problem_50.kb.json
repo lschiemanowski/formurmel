@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_50": {
+      "id": "problem_50",
+      "type": "statement",
+      "natural_language": "A continuous self-map of a compact metric space without fixed points is uniformly separated from",
+      "lean_name": "exists_eps_pos_of_no_fixed_point",
+      "lean": "theorem exists_eps_pos_of_no_fixed_point\n    {X : Type*} [MetricSpace X] [CompactSpace X]\n    (f : X → X) (hf : Continuous f) (hfix : ∀ x : X, f x ≠ x) :\n    ∃ eps > 0, ∀ x : X, eps ≤ dist x (f x)",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "the identity.\n\nProof: consider the function `g(x) = dist x (f x)`. This is continuous. Since `X` is compact, `g`\nattains a minimum value `m`. The assumption `f x ≠ x` means `g(x) > 0` for all `x`, so the minimum\ncannot be `0`; hence `m > 0`. Taking `eps = m` gives `eps ≤ dist x (f x)` for every `x`.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_50"
+  ]
+}

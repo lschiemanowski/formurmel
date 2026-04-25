@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 6 (`x = y * y`) implies Equation 3708 (`x * x = (y * z) * (w * z)`).",
+  "lean_statement": "theorem problem_normal_0466\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y z w : G, x = (op y y)) :\n    ∀ x y z w : G, (op x x) = (op (op y z) (op w z))",
+  "proof": "",
+  "source_problem_id": "normal_0466",
+  "source_index": 466,
+  "difficulty": "normal",
+  "eq1_id": 6,
+  "eq2_id": 3708,
+  "equation1": "x = y * y",
+  "equation2": "x * x = (y * z) * (w * z)",
+  "answer": true
+}

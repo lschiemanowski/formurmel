@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_20": {
+      "id": "problem_20",
+      "type": "statement",
+      "natural_language": "If a continuous function `f : ℝ → ℝ` vanishes on all rationals, then it vanishes everywhere.",
+      "lean_name": "eq_zero_of_eq_zero_on_rationals",
+      "lean": "namespace Real\nopen Filter Topology\n\ntheorem eq_zero_of_eq_zero_on_rationals (f : ℝ → ℝ) (hf : Continuous f)\n    (hq : ∀ q : ℚ, f (q : ℝ) = 0) :\n    ∀ x : ℝ, f x = 0",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": true,
+      "error": null,
+      "natural_language_proof": "Proof: given `x : ℝ`, choose a sequence of rationals `q_n → x` (using density of `ℚ`). Then\n`f q_n = 0` for all `n`, so by continuity `f x = lim f q_n = 0`.",
+      "lean_proof": "by\n  intro x\n  have h_seq : ∃ u : ℕ → ℚ, StrictMono u ∧ (∀ n, u n < x) ∧ Tendsto (fun n => (u n : ℝ)) atTop (𝓝 x) := Real.exists_seq_rat_strictMono_tendsto x\n  rcases h_seq with ⟨u, hu_strict, hu_lt, hu_tendsto⟩\n  have h_f_u : ∀ n, f (u n : ℝ) = 0 := by\n    intro n\n    exact hq (u n)\n  have h_const : (fun n => f (u n : ℝ)) = fun _ => (0 : ℝ) := by\n    funext n\n    rw [h_f_u n]\n  have h_tendsto_fx : Tendsto (fun n => f (u n : ℝ)) atTop (𝓝 (f x)) := Tendsto.comp (hf.tendsto x) hu_tendsto\n  rw [h_const] at h_tendsto_fx\n  exact by\n    simp [Metric.tendsto_atTop] at h_tendsto_fx\n    by_contra hne\n    have h_abs_pos : 0 < |f x| := abs_pos.mpr hne\n    specialize h_tendsto_fx (|f x| / 2) (by linarith)\n    rcases h_tendsto_fx with ⟨N, hN⟩\n    have : |f x| < |f x| / 2 := hN N (by linarith)\n    linarith [abs_nonneg (f x)]",
+      "verified": true,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_20"
+  ]
+}

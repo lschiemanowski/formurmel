@@ -1,0 +1,5 @@
+{
+  "statement": "The union of the kernels `⋃ n, ker(f^n)` (implemented as `⨆ n, ker(f^n)`) is invariant under `f`.",
+  "lean_statement": "theorem iSup_ker_pow_mem_invtSubmodule\n    {K V : Type*} [CommSemiring K] [AddCommMonoid V] [Module K V]\n    (f : Module.End K V) :\n    (⨆ n : ℕ, LinearMap.ker (f ^ n)) ∈ f.invtSubmodule",
+  "proof": "Proof: write `W := ⨆ n, ker(f ^ n)`. Take `x ∈ W`. By definition of the supremum, `x` already lies\nin `ker(f ^ n)` for some `n` (here we use that `ker(f ^ n)` is an increasing family, so the `⨆` is\njust their union). Then `(f ^ n) x = 0`, and applying `f` gives\n`(f ^ n) (f x) = (f ^ (n + 1)) x = f ((f ^ n) x) = 0`. Hence `f x ∈ ker(f ^ (n + 1)) ⊆ W`.\nSo `f` maps `W` into itself, i.e. `W` is invariant."
+}

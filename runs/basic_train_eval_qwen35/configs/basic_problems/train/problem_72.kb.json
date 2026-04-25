@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_72": {
+      "id": "problem_72",
+      "type": "statement",
+      "natural_language": "There exists an injective but not surjective linear endomorphism of `Real^Nat`.",
+      "lean_name": "exists_injective_not_surjective_endomorphism_real_sequences",
+      "lean": "theorem exists_injective_not_surjective_endomorphism_real_sequences :\n    ∃ f : (Nat → Real) →ₗ[Real] (Nat → Real),\n      Function.Injective f ∧ ¬ Function.Surjective f",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof: take the right shift `f` defined by `(f x) 0 = 0` and `(f x) (n+1) = x n`. This map is\nlinear. It is injective: if `f x = f y`, then for each `n` we have `x n = (f x) (n+1) = (f y) (n+1)\n = y n`, so `x = y`. It is not surjective because every element in the image has `0` as its first\ncoordinate, so for example the sequence with first coordinate `1` is not in the image.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_72"
+  ]
+}

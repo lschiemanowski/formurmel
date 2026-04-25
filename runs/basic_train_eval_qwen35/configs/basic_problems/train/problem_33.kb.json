@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_33": {
+      "id": "problem_33",
+      "type": "statement",
+      "natural_language": "Dini's theorem on an interval: monotone pointwise convergence of continuous functions to a continuous",
+      "lean_name": "tendstoUniformlyOn_of_monotone_continuousOn",
+      "lean": "theorem tendstoUniformlyOn_of_monotone_continuousOn\n    (f_n : Nat → Real → Real) (f : Real → Real) (a b : Real)\n    (hmono : ∀ x ∈ Set.Icc a b, Monotone (fun n => f_n n x))\n    (hcont : ∀ n, ContinuousOn (f_n n) (Set.Icc a b))\n    (hcont_lim : ContinuousOn f (Set.Icc a b))\n    (hpt : ∀ x ∈ Set.Icc a b, Tendsto (fun n => f_n n x) atTop (nhds (f x))) :\n    TendstoUniformlyOn (fun n x => f_n n x) f atTop (Set.Icc a b)",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "limit on `[a,b]` is uniform.\n\nProof: fix `eps > 0` and let `K = [a,b]`. For each `n`, set\n`U_n = {x in K | f x - f_n n x < eps}`. Since `f` and `f_n n` are continuous on `K`, each `U_n` is\nopen in `K`. Monotonicity in `n` implies `U_n ⊆ U_{n+1}`. Also pointwise convergence implies that\nfor every `x ∈ K` we have `f_n n x -> f x`, so eventually `f x - f_n n x < eps`, hence\n`⋃ n, U_n = K`.\nBecause `K` is compact, an increasing open cover has a single set that already covers: there is\n`N` with `U_N = K`. Thus for all `x ∈ K`, `0 ≤ f x - f_n N x < eps`, which is exactly uniform\nconvergence on `K`.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_33"
+  ]
+}

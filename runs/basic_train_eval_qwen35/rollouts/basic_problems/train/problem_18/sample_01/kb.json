@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_18": {
+      "id": "problem_18",
+      "type": "statement",
+      "natural_language": "Ratio test (absolute convergence): if `limsup ‖a (n+1)‖ / ‖a n‖ < 1` and `‖a n‖ ≠ 0` for all large",
+      "lean_name": "summable_norm_of_limsup_ratio_lt_one",
+      "lean": "theorem summable_norm_of_limsup_ratio_lt_one\n    {E : Type*} [SeminormedAddCommGroup E]\n    (a : ℕ → E)\n    (hnz : ∃ N : ℕ, ∀ n : ℕ, n ≥ N → ‖a n‖ ≠ 0)\n    (h : limsup (fun n : ℕ => ‖a (n + 1)‖ / ‖a n‖) atTop < 1) :\n    Summable (fun n => ‖a n‖)",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": false,
+      "error": "/tmp/kb-compile-2nlpv6a5/Main.lean:9:9: error: Function expected at\n  limsup\nbut this term has type\n  ?m.1\n\nNote: Expected a function because this term is being applied to the argument\n  (fun n : ℕ => ‖a (n + 1)‖ / ‖a n‖)\n\nHint: The identifier `limsup` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.",
+      "natural_language_proof": "`n`, then `∑ ‖a n‖` is summable.\n\nNote: in Lean, real division satisfies `x / 0 = 0` (since `0⁻¹ = 0`), so without the extra\nassumption on `‖a n‖` the statement would be false.\n\nProof (ratio test): pick `r` with `limsup (‖a (n+1)‖ / ‖a n‖) < r < 1`. Then for all sufficiently\nlarge `n` we have `‖a (n+1)‖ / ‖a n‖ ≤ r`. Using that `‖a n‖ ≠ 0` for large `n`, this implies\n`‖a (n+1)‖ ≤ r * ‖a n‖`. Iterating gives `‖a (N+m)‖ ≤ ‖a N‖ * r^m` for `m ≥ 0`, so the tail of\n`∑ ‖a n‖` is bounded by a geometric series with ratio `r`. Hence `∑ ‖a n‖` converges.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_18"
+  ]
+}

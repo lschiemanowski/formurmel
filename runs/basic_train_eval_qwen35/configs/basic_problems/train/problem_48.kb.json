@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_48": {
+      "id": "problem_48",
+      "type": "statement",
+      "natural_language": "A continuous map from a connected space to `Z` is constant.",
+      "lean_name": "continuous_int_eq_const_of_connected",
+      "lean": "theorem continuous_int_eq_const_of_connected\n    {X : Type*} [TopologicalSpace X] [ConnectedSpace X]\n    (f : X → Int) (hf : Continuous f) :\n    ∃ z : Int, ∀ x : X, f x = z",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof: the image `f(X)` of a connected space under a continuous map is connected. But `Int` has the\ndiscrete topology (singletons are open), so the only connected subsets of `Int` are singletons.\nHence `f(X)` is a singleton, meaning there exists `z : Int` with `f x = z` for all `x`.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_48"
+  ]
+}

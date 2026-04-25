@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_39": {
+      "id": "problem_39",
+      "type": "statement",
+      "natural_language": "If `∑ ‖a n‖` is finite, then `a n → 0`.",
+      "lean_name": "tendsto_zero_of_summable_norm",
+      "lean": "theorem tendsto_zero_of_summable_norm\n    {E : Type*} [NormedAddCommGroup E]\n    (a : Nat → E) (h : Summable (fun n => ‖a n‖)) :\n    Tendsto a atTop (nhds 0)",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof: since `∑ ‖a n‖` converges, its tails go to `0`. Given `eps > 0`, choose `N` such that\n`∑_{k ≥ N} ‖a k‖ < eps`. Then for any `n ≥ N` we have `‖a n‖ ≤ ∑_{k ≥ n} ‖a k‖ ≤ ∑_{k ≥ N} ‖a k‖ < eps`.\nThus `‖a n‖ → 0`, and therefore `a n → 0`.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_39"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 1948 (`x = (y * (y * z)) * (y * w)`) implies Equation 900 (`x = y * ((x * z) * (z * w))`).",
+  "lean_statement": "theorem problem_normal_0805\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y z w : G, x = (op (op y (op y z)) (op y w))) :\n    ∀ x y z w : G, x = (op y (op (op x z) (op z w)))",
+  "proof": "",
+  "source_problem_id": "normal_0805",
+  "source_index": 805,
+  "difficulty": "normal",
+  "eq1_id": 1948,
+  "eq2_id": 900,
+  "equation1": "x = (y * (y * z)) * (y * w)",
+  "equation2": "x = y * ((x * z) * (z * w))",
+  "answer": true
+}

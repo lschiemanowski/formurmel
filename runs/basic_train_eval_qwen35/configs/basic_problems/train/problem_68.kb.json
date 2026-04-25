@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_68": {
+      "id": "problem_68",
+      "type": "statement",
+      "natural_language": "Two affine subspace translates are equal iff the subspaces are equal and the difference lies in them.",
+      "lean_name": "addCoset_eq_iff",
+      "lean": "theorem addCoset_eq_iff\n    {K V : Type*} [Field K] [AddCommGroup V] [Module K V]\n    (U1 U2 : Submodule K V) (v1 v2 : V) :\n    v1 +ᵥ (U1 : Set V) = v2 +ᵥ (U2 : Set V) ↔\n      U1 = U2 ∧ v1 - v2 ∈ U1",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof: if `v1 +ᵥ U1 = v2 +ᵥ U2`, then translating by `-v1` gives `U1 = (v2 - v1) +ᵥ U2`. Since\n`0 ∈ U1`, we have `0 ∈ (v2 - v1) +ᵥ U2`, so `v1 - v2 ∈ U2`. Hence also `v2 - v1 ∈ U2`, and adding\nan element of `U2` does not change the translate, so `(v2 - v1) +ᵥ U2 = U2`. Therefore `U1 = U2`,\nand then `v1 - v2 ∈ U1` as well.\n\nConversely, if `U1 = U2` and `v1 - v2 ∈ U1`, then `v1 = v2 + u` for some `u ∈ U1`, so\n`v1 +ᵥ U1 = (v2 + u) +ᵥ U1 = v2 +ᵥ U1 = v2 +ᵥ U2`. Hence the translates are equal.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_68"
+  ]
+}

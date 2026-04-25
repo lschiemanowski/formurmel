@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 1900 (`x = (y * (x * y)) * (z * x)`) implies Equation 1966 (`x = (y * (z * x)) * (z * x)`).",
+  "lean_statement": "theorem problem_normal_0144\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y z : G, x = (op (op y (op x y)) (op z x))) :\n    ∀ x y z : G, x = (op (op y (op z x)) (op z x))",
+  "proof": "",
+  "source_problem_id": "normal_0144",
+  "source_index": 144,
+  "difficulty": "normal",
+  "eq1_id": 1900,
+  "eq2_id": 1966,
+  "equation1": "x = (y * (x * y)) * (z * x)",
+  "equation2": "x = (y * (z * x)) * (z * x)",
+  "answer": true
+}

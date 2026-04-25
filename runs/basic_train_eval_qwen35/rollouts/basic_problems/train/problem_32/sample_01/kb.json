@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_32": {
+      "id": "problem_32",
+      "type": "statement",
+      "natural_language": "Dirichlet test: bounded partial sums and a monotone sequence tending to `0` yield convergence of `∑ a_n b_n`.",
+      "lean_name": "summable_mul_of_bounded_partial_sums_of_monotone_tendsto_zero",
+      "lean": "theorem summable_mul_of_bounded_partial_sums_of_monotone_tendsto_zero\n    (a b : Nat → Real)\n    (hA : ∃ M, ∀ N, abs (Finset.sum (Finset.range N) (fun n => a n)) ≤ M)\n    (hb_mono : Monotone b) (hb_zero : Tendsto b atTop (nhds 0)) :\n    Summable (fun n => a n * b n)",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof: let `A N = ∑_{n < N} a n` be the partial sums, so `|A N| ≤ M` for all `N`. For `m < n`,\nsummation by parts gives\n`∑_{k=m}^{n-1} a k * b k = A n * b n - A m * b m + ∑_{k=m}^{n-1} A (k+1) * (b k - b (k+1))`.\nTaking absolute values and using `|A _| ≤ M` yields\n`|∑_{k=m}^{n-1} a k * b k| ≤ M (|b n| + |b m| + ∑_{k=m}^{n-1} |b k - b (k+1)|)`.\nSince `b` is monotone, the differences `b k - b (k+1)` have constant sign and the sum telescopes to\n`|b n - b m| ≤ |b n| + |b m|`. Hence the tail is bounded by a constant multiple of `|b m| + |b n|`,\nwhich goes to `0` as `m,n -> ∞` because `b n -> 0`. Thus the partial sums of `∑ a_n b_n` form a\nCauchy sequence, so the series is summable.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_32"
+  ]
+}

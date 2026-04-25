@@ -1,0 +1,5 @@
+{
+  "statement": "Fermat's little theorem in the form `k^p ≡ k [ZMOD p]` for prime `p`.",
+  "lean_statement": "theorem fermat_little_zmod {p : ℕ} (hp : Nat.Prime p) (k : ℤ) : k ^ p ≡ k [ZMOD p]",
+  "proof": "Proof: work modulo `p`. If `k ≡ 0`, then `k^p ≡ 0 ≡ k`. Otherwise the class of `k` is a unit in\n`(ZMod p)ˣ`, whose multiplicative group has order `p - 1`. Hence `k^(p-1) ≡ 1 (mod p)`. Multiplying\nby `k` gives `k^p ≡ k (mod p)`, i.e. `k ^ p ≡ k [ZMOD p]`."
+}

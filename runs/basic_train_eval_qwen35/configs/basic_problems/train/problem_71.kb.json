@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_71": {
+      "id": "problem_71",
+      "type": "statement",
+      "natural_language": "The space of symmetric matrices has dimension `n (n + 1) / 2`.",
+      "lean_name": "finrank_symm_matrices",
+      "lean": "theorem finrank_symm_matrices\n    {K : Type*} [Field K] {n : Nat}\n    (S : Submodule K (Matrix (Fin n) (Fin n) K))\n    (hS : (S : Set (Matrix (Fin n) (Fin n) K)) = {A | Matrix.IsSymm A}) :\n    Module.finrank K S = n * (n + 1) / 2",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof: a symmetric matrix is determined by the entries on and above the diagonal: there are `n`\ndiagonal entries and `n*(n-1)/2` strictly upper-diagonal entries. Equivalently, consider the\nfollowing family of symmetric matrices: the diagonal matrix units `E_{ii}` and, for `i < j`, the\nsymmetrized off-diagonal matrices `E_{ij} + E_{ji}`. These matrices are linearly independent, and\nevery symmetric matrix is a unique linear combination of them by reading off its diagonal and\nupper-diagonal entries. Hence they form a basis of the symmetric subspace, whose size is\n`n + n*(n-1)/2 = n*(n+1)/2`.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_71"
+  ]
+}

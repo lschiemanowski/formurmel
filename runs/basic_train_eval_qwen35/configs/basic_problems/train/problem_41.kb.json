@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_41": {
+      "id": "problem_41",
+      "type": "statement",
+      "natural_language": "A group with exactly one element of order `2` has that element in the center.",
+      "lean_name": "central_of_unique_order_two",
+      "lean": "theorem central_of_unique_order_two\n    {G : Type*} [Group G]\n    (h : ∃! g : G, g ≠ 1 ∧ g ^ 2 = 1) :\n    ∃ g : G, g ≠ 1 ∧ g ^ 2 = 1 ∧ ∀ x : G, x * g = g * x",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof: let `g` be the unique nontrivial element with `g^2 = 1`. For any `x : G`, the conjugate\n`x * g * x⁻¹` also satisfies `(x * g * x⁻¹)^2 = x * g^2 * x⁻¹ = 1`. It is not `1`, since otherwise\nconjugating back would give `g = 1`. By uniqueness we must have `x * g * x⁻¹ = g`, which is\nequivalent to `x * g = g * x`. Thus `g` commutes with every element, i.e. `g` is central.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_41"
+  ]
+}

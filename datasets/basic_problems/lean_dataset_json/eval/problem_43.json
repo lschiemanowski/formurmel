@@ -1,0 +1,5 @@
+{
+  "statement": "A polynomial over a field with more roots than its degree is the zero polynomial.",
+  "lean_statement": "theorem polynomial_eq_zero_of_card_roots_gt_natDegree\n    {K : Type*} [Field K] (p : Polynomial K) (s : Finset K)\n    (hs : ∀ x ∈ s, p.eval x = 0)\n    (hcard : p.natDegree < s.card) :\n    p = 0",
+  "proof": "Proof: if `p = 0` there is nothing to show. Otherwise, a nonzero polynomial of degree `d` has at\nmost `d` roots in a field. Since every `x ∈ s` is a root by `hs` and `s.card > p.natDegree` by\n`hcard`, this contradicts the bound on the number of roots. Hence `p` must be the zero polynomial."
+}

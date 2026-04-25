@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 754 (`x = y * (z * ((x * w) * z))`) implies Equation 2134 (`x = ((y * y) * y) * (x * x)`).",
+  "lean_statement": "theorem problem_normal_0691\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y z w : G, x = (op y (op z (op (op x w) z)))) :\n    ∀ x y z w : G, x = (op (op (op y y) y) (op x x))",
+  "proof": "",
+  "source_problem_id": "normal_0691",
+  "source_index": 691,
+  "difficulty": "normal",
+  "eq1_id": 754,
+  "eq2_id": 2134,
+  "equation1": "x = y * (z * ((x * w) * z))",
+  "equation2": "x = ((y * y) * y) * (x * x)",
+  "answer": true
+}

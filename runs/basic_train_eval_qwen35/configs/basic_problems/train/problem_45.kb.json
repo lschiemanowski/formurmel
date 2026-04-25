@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_45": {
+      "id": "problem_45",
+      "type": "statement",
+      "natural_language": "If `l v = 1`, then `V` splits as `ker l ⊕ span{v}`.",
+      "lean_name": "ker_span_isCompl_of_linear_eq_one",
+      "lean": "theorem ker_span_isCompl_of_linear_eq_one\n    {K V : Type*} [Field K] [AddCommGroup V] [Module K V]\n    (l : V →ₗ[K] K) (v : V) (hv : l v = 1) :\n    IsCompl (LinearMap.ker l) (Submodule.span K {v})",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof: first the intersection is trivial. If `x ∈ ker l ∩ span{v}`, then `x = a • v` for some `a`\nand also `0 = l x = a * l v = a`, so `x = 0`.\n\nNext, every `x : V` decomposes as\n`x = (x - (l x) • v) + (l x) • v`. The second term lies in `span{v}`. For the first term,\n`l (x - (l x) • v) = l x - (l x) * l v = l x - (l x) * 1 = 0`, so it lies in `ker l`.\nThus `V = ker l + span{v}` and the sum is direct, giving the claimed splitting.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_45"
+  ]
+}

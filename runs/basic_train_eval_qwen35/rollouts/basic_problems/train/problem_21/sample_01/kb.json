@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_21": {
+      "id": "problem_21",
+      "type": "statement",
+      "natural_language": "Every bounded monotone sequence of real numbers converges.",
+      "lean_name": "tendsto_of_monotone_bddAbove",
+      "lean": "theorem tendsto_of_monotone_bddAbove (u : ℕ → ℝ) (hu_mono : Monotone u) (hu_bdd : BddAbove (Set.range u)) :\n    ∃ l : ℝ, Filter.Tendsto u Filter.atTop (nhds l)",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": true,
+      "error": null,
+      "natural_language_proof": null,
+      "lean_proof": "by\n  use ⨆ i, u i\n  apply tendsto_atTop_ciSup\n  exact hu_mono\n  exact hu_bdd",
+      "verified": true,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_21"
+  ]
+}

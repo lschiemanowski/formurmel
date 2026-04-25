@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_13": {
+      "id": "problem_13",
+      "type": "statement",
+      "natural_language": "If `f` and `g` commute, then `ker(f)` and `range(f)` are invariant under `g`.",
+      "lean_name": "ker_range_invtSubmodule_of_commute",
+      "lean": "theorem ker_range_invtSubmodule_of_commute\n    {K V : Type*} [CommSemiring K] [AddCommMonoid V] [Module K V]\n    (f g : Module.End K V)\n    (hfg : f * g = g * f) :\n    LinearMap.ker f ∈ g.invtSubmodule ∧ LinearMap.range f ∈ g.invtSubmodule",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": true,
+      "error": null,
+      "natural_language_proof": "Proof: assume `f g = g f`. For the kernel, let `x ∈ ker f`, so `f x = 0`. Then\n`f (g x) = (f g) x = (g f) x = g (f x) = 0`, hence `g x ∈ ker f`.\nFor the range, take `y ∈ range f`, so `y = f x` for some `x`. Then\n`g y = g (f x) = (g f) x = (f g) x = f (g x)`, which lies again in `range f`.",
+      "lean_proof": "by\n  constructor\n  · intro y hy\n    rw [Submodule.mem_comap]\n    rw [LinearMap.ker]\n    rw [Submodule.mem_comap]\n    have hy' : f y = 0 := hy\n    have h : f (g y) = g (f y) := congr_arg (fun h => h y) hfg\n    rw [h, hy']\n    exact (LinearMap.map_zero g)\n  · intro y hy\n    rw [Submodule.mem_comap]\n    have hy' : ∃ x, f x = y := hy\n    rcases hy' with ⟨x, rfl⟩\n    have h : f (g x) = g (f x) := congr_arg (fun h => h x) hfg\n    rw [← h]\n    exact (LinearMap.mem_range_self f (g x))",
+      "verified": true,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_13"
+  ]
+}

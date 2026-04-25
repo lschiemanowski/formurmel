@@ -1,0 +1,5 @@
+{
+  "statement": "A continuous map from a connected space to `Z` is constant.",
+  "lean_statement": "theorem continuous_int_eq_const_of_connected\n    {X : Type*} [TopologicalSpace X] [ConnectedSpace X]\n    (f : X → Int) (hf : Continuous f) :\n    ∃ z : Int, ∀ x : X, f x = z",
+  "proof": "Proof: the image `f(X)` of a connected space under a continuous map is connected. But `Int` has the\ndiscrete topology (singletons are open), so the only connected subsets of `Int` are singletons.\nHence `f(X)` is a singleton, meaning there exists `z : Int` with `f x = z` for all `x`."
+}

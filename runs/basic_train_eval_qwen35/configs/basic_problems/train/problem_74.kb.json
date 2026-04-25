@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_74": {
+      "id": "problem_74",
+      "type": "statement",
+      "natural_language": "Rank inequalities for a composition `f ∘ g` when `dim V = n`.",
+      "lean_name": "rank_comp_bounds",
+      "lean": "theorem rank_comp_bounds\n    {K U V W : Type*} [Field K]\n    [AddCommGroup U] [Module K U]\n    [AddCommGroup V] [Module K V] [FiniteDimensional K V]\n    [AddCommGroup W] [Module K W]\n    (f : V →ₗ[K] W) (g : U →ₗ[K] V) (n : Nat)\n    (hn : Module.finrank K V = n) :\n    Module.finrank K (LinearMap.range f) + Module.finrank K (LinearMap.range g) - n\n        ≤ Module.finrank K (LinearMap.range (f.comp g)) ∧\n      Module.finrank K (LinearMap.range (f.comp g)) ≤\n        min (Module.finrank K (LinearMap.range f)) (Module.finrank K (LinearMap.range g))",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof: for the upper bound, `range (f ∘ g)` is contained in `range f`, so\n`rank(f ∘ g) ≤ rank f`. Also `range (f ∘ g) = f '' (range g)`, so its dimension is at most that of\n`range g`, hence `rank(f ∘ g) ≤ rank g`. Therefore `rank(f ∘ g) ≤ min(rank f, rank g)`.\n\nFor the lower bound, restrict `f` to `range g`. Then\nits range is exactly `range (f ∘ g)`, so\n`rank(f ∘ g) = dim(range g) - dim(ker f ∩ range g)`.\nWe have `dim(ker f ∩ range g) ≤ dim(ker f)`. By rank-nullity for `f : V -> W`,\n`dim(ker f) = n - dim(range f)`. Hence\n`rank(f ∘ g) ≥ dim(range g) - (n - dim(range f)) = dim(range f) + dim(range g) - n`,\nwhich is the desired inequality.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_74"
+  ]
+}

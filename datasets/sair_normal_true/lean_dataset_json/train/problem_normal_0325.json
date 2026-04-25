@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 3618 (`x * y = z * ((z * x) * z)`) implies Equation 312 (`x * x = y * (x * x)`).",
+  "lean_statement": "theorem problem_normal_0325\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y z : G, (op x y) = (op z (op (op z x) z))) :\n    ∀ x y z : G, (op x x) = (op y (op x x))",
+  "proof": "",
+  "source_problem_id": "normal_0325",
+  "source_index": 325,
+  "difficulty": "normal",
+  "eq1_id": 3618,
+  "eq2_id": 312,
+  "equation1": "x * y = z * ((z * x) * z)",
+  "equation2": "x * x = y * (x * x)",
+  "answer": true
+}

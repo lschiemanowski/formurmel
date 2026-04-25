@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_10": {
+      "id": "problem_10",
+      "type": "statement",
+      "natural_language": "Root test (absolute convergence): if `limsup ‖a (n+1)‖^(1/(n+1)) < 1`, then `∑ ‖a n‖` is summable.",
+      "lean_name": "summable_norm_of_limsup_root_lt_one",
+      "lean": "theorem summable_norm_of_limsup_root_lt_one\n    {E : Type*} [SeminormedAddCommGroup E]\n    (a : ℕ → E)\n    (h :\n      Filter.limsup\n          (fun n : ℕ =>\n            ENNReal.ofReal ((‖a (n + 1)‖ : ℝ) ^ (1 / (n + 1 : ℝ))))\n          atTop < 1) :\n    Summable (fun n => ‖a n‖)",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": false,
+      "error": "Lean compilation uses sorry",
+      "natural_language_proof": "Proof (root test): let `L` be the limsup of `‖a (n+1)‖^(1/(n+1))`. Choose `r` with `L < r < 1`.\nThen for all sufficiently large `n` we have `‖a (n+1)‖^(1/(n+1)) ≤ r`, hence\n`‖a (n+1)‖ ≤ r^(n+1)`. Therefore the tail of `∑ ‖a n‖` is bounded by a geometric series with ratio\n`r`, which converges. Hence `∑ ‖a n‖` is summable.",
+      "lean_proof": "by\n  -- Get the limsup value\n  have L : ℝ≥0∞ := Filter.limsup (fun n : ℕ => ENNReal.ofReal ((‖a (n + 1)‖ : ℝ) ^ (1 / (n + 1 : ℝ)))) atTop\n  -- L < 1 implies ENNReal.toReal L < 1\n  have hL : L < ENNReal.ofReal (1 : ℝ) := by simpa [L] using h\n  -- L ≠ ∞ because ∞ is not less than any finite real\n  have hL_ne_infty : L ≠ ∞ := by\n    intro h\n    rw [h] at hL\n    exact lt_asymm (ENNReal.coe_lt_top 1) hL\n  -- Get r = (ENNReal.toReal L + 1) / 2\n  have r : ℝ := (ENNReal.toReal L + 1) / 2\n  have hr_lt_one : r < 1 := by linarith\n  -- Show L < r\n  have hr_gt_L : L < ENNReal.ofReal r := by\n    have h_equiv : L < ENNReal.ofReal r ↔ ENNReal.toReal L < ENNReal.toReal (ENNReal.ofReal r) :=\n      ENNReal.lt_ofReal_iff_toReal_lt hL_ne_infty L r\n    rw [h_equiv]\n    rw [ENNReal.toReal_ofReal (by linarith)]\n    have h1 : ENNReal.toReal L < r := by\n      have hL' : ENNReal.toReal L < 1 := by\n        have h_equiv2 : L < ENNReal.ofReal 1 ↔ ENNReal.toReal L < 1 :=\n          ENNReal.lt_ofReal_iff_toReal_lt hL_ne_infty L 1\n        rw [h_equiv2] at hL\n        exact hL\n      linarith\n    linarith\n  -- Eventually the root is bounded by r\n  have h_eventually : ∀ᶠ n in atTop, ENNReal.ofReal ((‖a (n + 1)‖ : ℝ) ^ (1 / (n + 1 : ℝ))) < ENNReal.ofReal r := by\n    exact eventually_lt_of_limsup_lt hr_gt_L\n  -- Comparison with geometric series\n  have h_summable_r_pow : Summable (fun n : ℕ => (ENNReal.ofReal r) ^ (n + 1)) := by\n    have : 0 ≤ ENNReal.ofReal r := ENNReal.ofReal_nonneg r\n    have : ENNReal.ofReal r < 1 := by\n      rw [ENNReal.ofReal_lt_iff]\n      exact hr_lt_one\n    exact NNReal.summable_geometric this.2\n  have h_norm_bound : ∀ n, ENNReal.ofReal (‖a n‖) ≤ ENNReal.ofReal (r ^ n) := by\n    sorry\n  exact Summable.of_le (h_norm_bound) h_summable_r_pow",
+      "verified": false,
+      "issue_kind": "proof",
+      "issue_explanation": "Unable to complete the proof due to issues with ENNReal lemmas. The `ENNReal.lt_ofReal_iff_toReal_lt` lemma requires the argument `a ≠ ∞` which I proved, but the tactic applications to access the iff structure (`.mpr`) are failing. The proof is incomplete with `sorry` placeholders.",
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_10"
+  ]
+}

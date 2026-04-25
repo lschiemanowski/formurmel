@@ -1,0 +1,5 @@
+{
+  "statement": "Every square matrix over a field of characteristic not 2 has a unique decomposition as a sum of a symmetric matrix and a skew-symmetric matrix.",
+  "lean_statement": "theorem matrix_symm_skew_decomposition_unique\n    {R : Type*} [Field R] [Invertible (2 : R)] (n : ℕ) (A : Matrix (Fin n) (Fin n) R) :\n    ∃! p : Matrix (Fin n) (Fin n) R × Matrix (Fin n) (Fin n) R,\n      Matrix.IsSymm p.1 ∧ p.2.transpose = -p.2 ∧ A = p.1 + p.2",
+  "proof": "Assume `2` is invertible in `R` (equivalently, the field has characteristic not `2`). Define\n`S := (A + Aᵀ)/2` and `K := (A - Aᵀ)/2`, where division by `2` uses the inverse of `2`.\nThen `Sᵀ = (Aᵀ + A)/2 = S`, so `S` is symmetric, and `Kᵀ = (Aᵀ - A)/2 = -K`, so `K` is\nskew-symmetric. Also `S + K = A` by expanding and cancelling.\n\nFor uniqueness, suppose `A = S' + K'` with `S'` symmetric and `K'` skew-symmetric. Taking transpose\ngives `Aᵀ = S' - K'`. Adding and subtracting the two equations yields\n`2S' = A + Aᵀ` and `2K' = A - Aᵀ`. Since `2` is invertible, this forces\n`S' = (A + Aᵀ)/2` and `K' = (A - Aᵀ)/2`. Therefore `(S, K)` is the unique such decomposition."
+}

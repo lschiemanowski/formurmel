@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_25": {
+      "id": "problem_25",
+      "type": "statement",
+      "natural_language": "Frobenius in characteristic `p`: in a commutative ring with `[CharP R p]`, `(x + y)^p = x^p + y^p`.",
+      "lean_name": "frobenius_char_p",
+      "lean": "theorem frobenius_char_p\n    {R : Type*} [CommRing R] {p : ℕ} (hp : Nat.Prime p) [CharP R p] (x y : R) :\n    (x + y) ^ p = x ^ p + y ^ p",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof: expand `(x + y)^p` by the binomial theorem as a finite sum over `k = 0,1,...,p`:\n`(x + y)^p = sum_{k=0}^p (p choose k) x^k y^(p-k)`. For `0 < k < p`, the binomial coefficient\n`(p choose k)` is divisible by `p` (since `p` is prime). In characteristic `p` this means\n`(p choose k) = 0` in `R`, so all the middle terms vanish. Only the `k = 0` and `k = p` terms\nremain, giving `(x + y)^p = y^p + x^p = x^p + y^p`.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_25"
+  ]
+}

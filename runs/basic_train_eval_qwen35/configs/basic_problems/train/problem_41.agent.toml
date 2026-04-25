@@ -1,0 +1,22 @@
+[backend]
+type = "qwen35_llama_cpp"
+llama_base_url = "http://localhost:8080"
+qwen35_enable_thinking = true
+temperature = 1.0
+timeout = 300.0
+retries = 3
+
+[tools]
+kb_path = "problem_41.kb.json"
+kb_lake_project = "../../../../../../lean_env"
+kb_autosave = true
+lean_lake_project = "../../../../../../lean_env"
+lean_default_timeout_seconds = 60.0
+murmel_semantic_score_chunk_size = 16384
+murmel_cache_dir = "../../../../../../../.cache/murmel"
+
+[agent]
+system_prompt_path = "../../../../../prompts/system_prompt.md"
+transcript_path = "../../../transcripts/basic_problems/train/problem_41.transcript.json"
+max_steps = 300
+verbose = false

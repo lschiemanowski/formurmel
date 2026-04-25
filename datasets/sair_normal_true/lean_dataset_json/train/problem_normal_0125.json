@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 3444 (`x * y = z * (w * (z * u))`) implies Equation 3910 (`x * x = (y * (z * w)) * y`).",
+  "lean_statement": "theorem problem_normal_0125\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y z w u : G, (op x y) = (op z (op w (op z u)))) :\n    ∀ x y z w u : G, (op x x) = (op (op y (op z w)) y)",
+  "proof": "",
+  "source_problem_id": "normal_0125",
+  "source_index": 125,
+  "difficulty": "normal",
+  "eq1_id": 3444,
+  "eq2_id": 3910,
+  "equation1": "x * y = z * (w * (z * u))",
+  "equation2": "x * x = (y * (z * w)) * y",
+  "answer": true
+}

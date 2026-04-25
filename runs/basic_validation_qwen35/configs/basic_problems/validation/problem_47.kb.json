@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_47": {
+      "id": "problem_47",
+      "type": "statement",
+      "natural_language": "If `K` is compact, `A` is closed, and `K ∩ A = ∅`, then the distance between them is positive.",
+      "lean_name": "exists_dist_pos_of_compact_closed_disjoint",
+      "lean": "theorem exists_dist_pos_of_compact_closed_disjoint\n    {X : Type*} [MetricSpace X] (K A : Set X)\n    (hK : IsCompact K) (hA : IsClosed A) (hKA : Disjoint K A) :\n    ∃ delta > 0, ∀ x ∈ K, ∀ y ∈ A, delta ≤ dist x y",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof: the function `x ↦ dist x A` is continuous. Since `K` is compact, it attains its minimum on\n`K`; let `delta` be this minimum. If `delta = 0`, we can pick `x_n ∈ K` with `dist x_n A → 0`.\nBy compactness, a subsequence converges to some `x ∈ K`. The condition `dist x_n A → 0` forces\n`x ∈ A` because `A` is closed, contradicting `K ∩ A = ∅`. Hence `delta > 0`. For any `x ∈ K` and\n`y ∈ A` we have `delta ≤ dist x A ≤ dist x y`, which gives the uniform positive separation.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_47"
+  ]
+}

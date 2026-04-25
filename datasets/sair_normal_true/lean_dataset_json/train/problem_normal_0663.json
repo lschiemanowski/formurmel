@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 1144 (`x = y * ((y * (z * w)) * w)`) implies Equation 1212 (`x = y * ((z * (w * w)) * x)`).",
+  "lean_statement": "theorem problem_normal_0663\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y z w : G, x = (op y (op (op y (op z w)) w))) :\n    ∀ x y z w : G, x = (op y (op (op z (op w w)) x))",
+  "proof": "",
+  "source_problem_id": "normal_0663",
+  "source_index": 663,
+  "difficulty": "normal",
+  "eq1_id": 1144,
+  "eq2_id": 1212,
+  "equation1": "x = y * ((y * (z * w)) * w)",
+  "equation2": "x = y * ((z * (w * w)) * x)",
+  "answer": true
+}

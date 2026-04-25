@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 1511 (`x = (y * x) * (z * (w * y))`) implies Equation 433 (`x = x * (y * (x * (z * y)))`).",
+  "lean_statement": "theorem problem_normal_0475\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y z w : G, x = (op (op y x) (op z (op w y)))) :\n    ∀ x y z w : G, x = (op x (op y (op x (op z y))))",
+  "proof": "",
+  "source_problem_id": "normal_0475",
+  "source_index": 475,
+  "difficulty": "normal",
+  "eq1_id": 1511,
+  "eq2_id": 433,
+  "equation1": "x = (y * x) * (z * (w * y))",
+  "equation2": "x = x * (y * (x * (z * y)))",
+  "answer": true
+}

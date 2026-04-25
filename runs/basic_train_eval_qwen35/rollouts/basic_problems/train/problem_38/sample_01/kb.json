@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_38": {
+      "id": "problem_38",
+      "type": "statement",
+      "natural_language": "If two continuous maps into a Hausdorff space agree on a dense set, then they are equal.",
+      "lean_name": "continuous_eq_of_eq_on_dense",
+      "lean": "theorem continuous_eq_of_eq_on_dense\n    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] [T2Space Y]\n    (Q : Set X) (hQ : Dense Q) (f g : X → Y)\n    (hf : Continuous f) (hg : Continuous g)\n    (hfg : ∀ x ∈ Q, f x = g x) :\n    f = g",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof: let `S = {x | f x = g x}`. In a Hausdorff space, the set `{(y1,y2) | y1 = y2}` is closed in\n`Y × Y`, hence `S = (fun x => (f x, g x))⁻¹(diagonal)` is closed in `X` because `f` and `g` are\ncontinuous. By assumption `Q ⊆ S`, and since `Q` is dense we have `closure Q = univ`, so the closed\nset `S` containing `Q` must be all of `X`. Therefore `f = g`.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_38"
+  ]
+}

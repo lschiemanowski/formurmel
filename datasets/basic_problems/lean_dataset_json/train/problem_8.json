@@ -1,0 +1,5 @@
+{
+  "statement": "If every element of a group satisfies `g^2 = 1`, then the group is abelian.",
+  "lean_statement": "theorem abelian_of_square_eq_one {G : Type*} [Group G] (h : ∀ g : G, g ^ 2 = 1) :\n    ∀ a b : G, a * b = b * a",
+  "proof": "Proof: fix `a, b`. Applying the hypothesis to `ab` gives `(ab)^2 = 1`, hence `ab = (ab)⁻¹`.\nBut `(ab)⁻¹ = b⁻¹ a⁻¹`. Also `a^2 = 1` implies `a = a⁻¹` (multiply `a*a = 1` on the right by `a⁻¹`),\nand similarly `b = b⁻¹`. Therefore `ab = b⁻¹ a⁻¹ = ba`."
+}

@@ -1,0 +1,5 @@
+{
+  "statement": "The `K`-span of the orbit `{(f^n) v | n : ℕ}` is invariant under `f`.",
+  "lean_statement": "theorem span_orbit_mem_invtSubmodule_moduleEnd\n    {K V : Type*} [CommSemiring K] [AddCommMonoid V] [Module K V]\n    (f : Module.End K V) (v : V) :\n    (Submodule.span K (Set.range fun n : ℕ => (f ^ n) v)) ∈ f.invtSubmodule",
+  "proof": "Proof: let `W` be the submodule spanned by the orbit. To show `W` is invariant, it suffices to\ncheck that `f` sends each generator `(f ^ n) v` back into `W`. But\n`f ((f ^ n) v) = (f ^ (n + 1)) v`, which is again an element of the orbit, hence lies in the set\nwhose span defines `W`. By linearity, `f` therefore maps all of `W` into `W`."
+}

@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 982 (`x = y * ((z * z) * (y * y))`) implies Equation 545 (`x = y * (z * (x * (z * x)))`).",
+  "lean_statement": "theorem problem_normal_0203\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y z : G, x = (op y (op (op z z) (op y y)))) :\n    ∀ x y z : G, x = (op y (op z (op x (op z x))))",
+  "proof": "",
+  "source_problem_id": "normal_0203",
+  "source_index": 203,
+  "difficulty": "normal",
+  "eq1_id": 982,
+  "eq2_id": 545,
+  "equation1": "x = y * ((z * z) * (y * y))",
+  "equation2": "x = y * (z * (x * (z * x)))",
+  "answer": true
+}

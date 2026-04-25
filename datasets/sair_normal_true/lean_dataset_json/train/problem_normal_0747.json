@@ -1,0 +1,13 @@
+{
+  "statement": "In every magma, Equation 30 (`x = (y * x) * z`) implies Equation 3152 (`x = (((y * y) * y) * y) * x`).",
+  "lean_statement": "theorem problem_normal_0747\n    {G : Type*} (op : G → G → G)\n    (h : ∀ x y z : G, x = (op (op y x) z)) :\n    ∀ x y z : G, x = (op (op (op (op y y) y) y) x)",
+  "proof": "",
+  "source_problem_id": "normal_0747",
+  "source_index": 747,
+  "difficulty": "normal",
+  "eq1_id": 30,
+  "eq2_id": 3152,
+  "equation1": "x = (y * x) * z",
+  "equation2": "x = (((y * y) * y) * y) * x",
+  "answer": true
+}

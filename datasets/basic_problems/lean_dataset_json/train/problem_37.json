@@ -1,0 +1,5 @@
+{
+  "statement": "A Lipschitz map sends Cauchy sequences to Cauchy sequences.",
+  "lean_statement": "theorem cauchySeq_map_of_lipschitz\n    {X Y : Type*} [PseudoMetricSpace X] [PseudoMetricSpace Y]\n    (f : X → Y) {K : NNReal} (hf : LipschitzWith K f)\n    (u : Nat → X) (hu : CauchySeq u) :\n    CauchySeq (fun n => f (u n))",
+  "proof": "Proof: since `f` is Lipschitz with constant `K`, we have\n`dist (f x) (f y) ≤ K * dist x y` for all `x,y`. Let `eps > 0`. Choose `N` such that for all\n`m,n ≥ N`, `dist (u m) (u n) < eps / K` (if `K = 0` any `N` works). Then for `m,n ≥ N`,\n`dist (f (u m)) (f (u n)) ≤ K * dist (u m) (u n) < eps`, so `f ∘ u` is Cauchy."
+}

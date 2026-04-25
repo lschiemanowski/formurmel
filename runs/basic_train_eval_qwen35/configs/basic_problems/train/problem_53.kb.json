@@ -1,0 +1,28 @@
+{
+  "nodes": {
+    "problem_53": {
+      "id": "problem_53",
+      "type": "statement",
+      "natural_language": "A uniform limit of Lipschitz functions with constant `L` is Lipschitz with the same constant.",
+      "lean_name": "lipschitzWith_of_tendsto_uniformly",
+      "lean": "theorem lipschitzWith_of_tendsto_uniformly\n    {X : Type*} [PseudoMetricSpace X]\n    (f_n : Nat → X → Real) (f : X → Real) {L : NNReal}\n    (hL : ∀ n, LipschitzWith L (f_n n))\n    (hconv : TendstoUniformly (fun n x => f_n n x) f atTop) :\n    LipschitzWith L f",
+      "write_protected": false,
+      "statement_write_protected": false,
+      "proof_write_protected": false,
+      "compiles": null,
+      "error": null,
+      "natural_language_proof": "Proof: fix `x,y`. For any `n`,\n`|f x - f y| ≤ |f x - f_n n x| + |f_n n x - f_n n y| + |f_n n y - f y|`.\nThe middle term is at most `L * dist x y` since `f_n n` is `L`-Lipschitz. By uniform convergence,\nwe can make the first and third terms uniformly as small as we like by taking `n` large. Letting\nthis error go to `0` yields `|f x - f y| ≤ L * dist x y` for all `x,y`, so `f` is Lipschitz with\nconstant `L`.",
+      "lean_proof": null,
+      "verified": null,
+      "issue_kind": null,
+      "issue_explanation": null,
+      "issue_confidence": null,
+      "issue_proposed_natural_language": null,
+      "issue_proposed_lean": null
+    }
+  },
+  "edges": [],
+  "text_order": [
+    "problem_53"
+  ]
+}
