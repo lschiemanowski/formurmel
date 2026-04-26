@@ -159,8 +159,11 @@ class KB:
         return node
 
     def remove_node(self, id: str) -> None:
-        if id not in self._graph.nodes:
-            raise KBError(f"Node '{id}' not found")
+        node = self.get_node(id)
+        if node.write_protected:
+            raise KBError(f"Node '{id}' is write-protected")
+        if node.type == NodeType.STATEMENT and node.statement_write_protected:
+            raise KBError(f"Node '{id}' statement fields are write-protected")
         del self._graph.nodes[id]
         self._graph.edges = [edge for edge in self._graph.edges if edge.source != id and edge.target != id]
         self._graph.text_order = [node_id for node_id in self._graph.text_order if node_id != id]
@@ -523,4 +526,3 @@ class KB:
         for namespace in reversed(namespace_parts):
             lines.append(f"end {namespace}")
         return "\n".join(lines)
-
