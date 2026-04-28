@@ -37,7 +37,7 @@ class ToolsConfig:
     murmel_cache_dir: Path | None = None
     murmel_config_path: Path | None = None
     murmel_mathlib_rev: str | None = None
-    murmel_semantic_device: str | None = None
+    murmel_semantic_device: str | None = "cpu"
     murmel_semantic_score_chunk_size: int = 16384
     lean_lake_project: Path | None = None
     lean_default_timeout_seconds: float = 60.0
@@ -196,7 +196,8 @@ def load_config(path: str | Path) -> AppConfig:
         murmel_semantic_device=_as_optional_str(
             tools_raw.get("murmel_semantic_device"),
             "tools.murmel_semantic_device",
-        ),
+        )
+        or "cpu",
         murmel_semantic_score_chunk_size=_as_int(
             tools_raw.get("murmel_semantic_score_chunk_size"),
             "tools.murmel_semantic_score_chunk_size",

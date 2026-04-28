@@ -49,11 +49,19 @@ def _json_dumps(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False)
 
 
+def _prompt_text(value: Any) -> str:
+    if value is None:
+        return ""
+    return str(value).strip()
+
+
 def _tool_argument_to_prompt(value: Any) -> str:
     if isinstance(value, Mapping):
         return _json_dumps(dict(value))
     if isinstance(value, (list, tuple)):
         return _json_dumps(list(value))
+    if value is None or isinstance(value, (bool, int, float)):
+        return _json_dumps(value)
     return str(value)
 
 
@@ -173,13 +181,13 @@ class Qwen35LlamaCppCompletionBackend(LLMBackend):
             parts.append("\n</tools>")
             parts.append(_TOOL_INSTRUCTIONS)
             if first_message.get("role") == "system":
-                system_content = str(first_message.get("content", "")).strip()
+                system_content = _prompt_text(first_message.get("content", ""))
                 if system_content:
                     parts.append("\n\n")
                     parts.append(system_content)
             parts.append("<|im_end|>\n")
         elif first_message.get("role") == "system":
-            system_content = str(first_message.get("content", "")).strip()
+            system_content = _prompt_text(first_message.get("content", ""))
             parts.append(f"<|im_start|>system\n{system_content}<|im_end|>\n")
 
         last_user_index = max(
@@ -193,7 +201,7 @@ class Qwen35LlamaCppCompletionBackend(LLMBackend):
         while index < len(messages):
             message = messages[index]
             role = message.get("role")
-            content = str(message.get("content", "")).strip()
+            content = _prompt_text(message.get("content", ""))
 
             if role == "system":
                 if index != 0:
@@ -205,7 +213,7 @@ class Qwen35LlamaCppCompletionBackend(LLMBackend):
                 index += 1
                 continue
             if role == "assistant":
-                reasoning = str(message.get("reasoning_content", "")).strip()
+                reasoning = _prompt_text(message.get("reasoning_content", ""))
                 body = content
                 tool_calls = message.get("tool_calls")
                 if isinstance(tool_calls, list) and tool_calls:
@@ -255,7 +263,7 @@ class Qwen35LlamaCppCompletionBackend(LLMBackend):
             if role == "tool":
                 parts.append("<|im_start|>user")
                 while index < len(messages) and messages[index].get("role") == "tool":
-                    tool_content = str(messages[index].get("content", "")).strip()
+                    tool_content = _prompt_text(messages[index].get("content", ""))
                     parts.append(f"\n<tool_response>\n{tool_content}\n</tool_response>")
                     index += 1
                 parts.append("<|im_end|>\n")
@@ -350,4 +358,3 @@ class Qwen35LlamaCppCompletionBackend(LLMBackend):
             return assistant_messages_from_chat_payload(assistant_payload)
         except (TypeError, ValueError) as exc:
             raise LLMBackendError(f"completion did not contain final text or tool calls: {exc}") from exc
-

@@ -27,6 +27,7 @@ class FakeMurmel:
                     "module": "Mathlib.Init.Data.Nat.Basic",
                     "declaration_head": "theorem Nat.add_comm (n m : Nat) : n + m = m + n",
                     "snippet": [{"line": 12, "text": "theorem Nat.add_comm ..."}],
+                    "active_context": {"variables": ["n m : Nat"]},
                 }
             )
         ]
@@ -41,6 +42,7 @@ class FakeMurmel:
                     "module": "Mathlib.Data.Set.Image",
                     "semantic_score": 0.8,
                     "declaration_head": "theorem Set.image_subset_iff ...",
+                    "active_context": {"open_namespaces": ["Set"]},
                 }
             )
         ]
@@ -53,6 +55,7 @@ class FakeMurmel:
                 "kind": "theorem",
                 "module": "Mathlib.Init.Data.Nat.Basic",
                 "declaration_head": "theorem Nat.zero_add (n : Nat) : 0 + n = n",
+                "active_context": {"variables": ["n : Nat"]},
             }
         )
 
@@ -111,6 +114,7 @@ def test_murmel_lexical_search_serializes_results() -> None:
     match = result["result"]["matches"][0]
     assert match["lean_declaration"].startswith("theorem Nat.add_comm")
     assert match["snippet_text"] == "12: theorem Nat.add_comm ..."
+    assert "active_context" not in match
 
 
 def test_murmel_semantic_search_uses_top_k_and_device() -> None:
@@ -142,6 +146,37 @@ def test_murmel_semantic_search_uses_top_k_and_device() -> None:
             "device": "cpu",
         },
     )
+    assert "active_context" not in result["result"]["matches"][0]
+
+
+def test_murmel_semantic_search_defaults_to_cpu() -> None:
+    app = FakeMurmel()
+    tool = MurmelTool(app=app)
+
+    result = tool.execute(
+        {
+            "action": "search",
+            "mode": "semantic",
+            "query": "image subset iff",
+        }
+    )
+
+    assert result["ok"] is True
+    assert app.calls[0][2]["device"] == "cpu"
+
+
+def test_murmel_search_can_include_active_context_on_request() -> None:
+    result = MurmelTool(app=FakeMurmel()).execute(
+        {
+            "action": "search",
+            "mode": "semantic",
+            "query": "image subset iff",
+            "include_active_context": True,
+        }
+    )
+
+    assert result["ok"] is True
+    assert result["result"]["matches"][0]["active_context"] == {"open_namespaces": ["Set"]}
 
 
 def test_murmel_show_and_describe() -> None:
@@ -153,6 +188,7 @@ def test_murmel_show_and_describe() -> None:
 
     assert show["ok"] is True
     assert show["result"]["declaration"]["lean_declaration"].startswith("theorem Nat.zero_add")
+    assert "active_context" not in show["result"]["declaration"]
     assert describe["ok"] is True
     assert "left identity" in describe["result"]["declaration"]["natural_language"]
     assert app.calls[0] == ("show", ("Nat.zero_add",), {"mathlib_rev": None, "max_lines": 2, "exact": True})

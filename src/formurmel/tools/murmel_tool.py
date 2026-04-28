@@ -21,8 +21,9 @@ _ACTION_FIELDS: dict[str, set[str]] = {
         "path_fragment",
         "with_snippet",
         "max_lines",
+        "include_active_context",
     },
-    "show": {"action", "name", "max_lines", "exact"},
+    "show": {"action", "name", "max_lines", "exact", "include_active_context"},
     "describe": {"action", "name", "exact"},
 }
 
@@ -121,8 +122,11 @@ def _attach_model_friendly_fields(data: dict[str, Any]) -> dict[str, Any]:
     return data
 
 
-def _serialize_result(value: Any) -> dict[str, Any]:
-    return _attach_model_friendly_fields(_object_to_dict(value))
+def _serialize_result(value: Any, *, include_active_context: bool = False) -> dict[str, Any]:
+    data = _attach_model_friendly_fields(_object_to_dict(value))
+    if not include_active_context:
+        data.pop("active_context", None)
+    return data
 
 
 class MurmelTool(Tool):
@@ -134,7 +138,7 @@ class MurmelTool(Tool):
         cache_dir: Path | None = None,
         config_path: Path | None = None,
         mathlib_rev: str | None = None,
-        semantic_device: str | None = None,
+        semantic_device: str | None = "cpu",
         semantic_score_chunk_size: int = 16384,
         app: Any | None = None,
     ) -> None:
@@ -158,7 +162,9 @@ class MurmelTool(Tool):
                 "Search and inspect mathlib through murmel. Use `search` with mode `semantic` "
                 "for meaning-based retrieval, `search` with mode `lexical` for names/text, "
                 "`show` for the Lean source of one declaration, and `describe` for murmel's "
-                "natural-language declaration description."
+                "natural-language declaration description. Search/show results omit "
+                "`active_context` by default; request it only when local declaration context is needed. "
+                "Semantic search uses the configured encoder device, which defaults to CPU."
             ),
             parameters={
                 "type": "object",
@@ -179,6 +185,13 @@ class MurmelTool(Tool):
                     "with_snippet": {"type": "boolean", "description": "Include source snippets in search results."},
                     "max_lines": {"type": "integer", "description": "Maximum snippet/source lines."},
                     "exact": {"type": "boolean", "description": "Require exact declaration name for show/describe."},
+                    "include_active_context": {
+                        "type": "boolean",
+                        "description": (
+                            "Include local Lean context such as open namespaces and surrounding variables. "
+                            "Defaults to false because this can be very long."
+                        ),
+                    },
                 },
                 "required": ["action"],
                 "additionalProperties": False,
@@ -210,13 +223,19 @@ class MurmelTool(Tool):
             return self._search(payload)
         if action == "show":
             name = _require_str(payload, "name", action)
+            include_active_context = _optional_bool(payload, "include_active_context", action, default=False)
             result = self._app_instance().show(
                 name,
                 mathlib_rev=self._mathlib_rev,
                 max_lines=_optional_int(payload, "max_lines", action, default=80),
                 exact=_optional_bool(payload, "exact", action, default=False),
             )
-            return tool_ok({"action": action, "declaration": _serialize_result(result)})
+            return tool_ok(
+                {
+                    "action": action,
+                    "declaration": _serialize_result(result, include_active_context=include_active_context),
+                }
+            )
         if action == "describe":
             name = _require_str(payload, "name", action)
             result = self._app_instance().describe(
@@ -236,6 +255,7 @@ class MurmelTool(Tool):
         limit = _optional_int(payload, "limit", action, default=10 if mode == "semantic" else 20)
         with_snippet = _optional_bool(payload, "with_snippet", action, default=False)
         max_lines = _optional_int(payload, "max_lines", action, default=80)
+        include_active_context = _optional_bool(payload, "include_active_context", action, default=False)
         kind = _optional_str(payload, "kind", action)
         module = _optional_str(payload, "module", action)
 
@@ -272,7 +292,10 @@ class MurmelTool(Tool):
             {
                 "action": action,
                 "mode": mode,
-                "matches": [_serialize_result(result) for result in results],
+                "matches": [
+                    _serialize_result(result, include_active_context=include_active_context)
+                    for result in results
+                ],
             }
         )
 

@@ -51,6 +51,30 @@ max_steps = 3
     assert "Include `by`" in kb_spec.parameters["properties"]["lean_proof"]["description"]
 
 
+def test_config_defaults_murmel_semantic_device_to_cpu(tmp_path: Path) -> None:
+    prompt_path = tmp_path / "system.md"
+    prompt_path.write_text("system prompt\n", encoding="utf-8")
+    config_path = tmp_path / "formurmel.toml"
+    config_path.write_text(
+        """
+[backend]
+type = "qwen35_llama_cpp"
+
+[tools]
+murmel_cache_dir = "murmel-cache"
+
+[agent]
+system_prompt_path = "system.md"
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    config = load_config(config_path)
+
+    assert config.tools.murmel_semantic_device == "cpu"
+
+
 def test_qwen_parser_accepts_murmel_tool_call() -> None:
     backend = Qwen35LlamaCppCompletionBackend(base_url="http://localhost:8080")
     messages = backend._parse_completion(
@@ -80,3 +104,45 @@ commutativity of addition on naturals
     assert messages[1].content.name == "murmel"
     assert messages[1].content.arguments["action"] == "search"
     assert messages[1].content.arguments["mode"] == "semantic"
+
+
+def test_qwen_prompt_renderer_does_not_render_none_message_content() -> None:
+    backend = Qwen35LlamaCppCompletionBackend(base_url="http://localhost:8080")
+
+    prompt = backend._render_prompt(
+        [
+            {"role": "system", "content": "system"},
+            {"role": "user", "content": "query"},
+            {
+                "role": "assistant",
+                "content": None,
+                "reasoning_content": None,
+                "tool_calls": [
+                    {
+                        "id": "call_1",
+                        "type": "function",
+                        "function": {
+                            "name": "murmel",
+                            "arguments": {
+                                "action": "search",
+                                "mode": "lexical",
+                                "query": "x",
+                                "regex": False,
+                                "module": None,
+                                "limit": 3,
+                            },
+                        },
+                    }
+                ],
+            },
+            {"role": "tool", "content": None},
+        ],
+        [],
+    )
+
+    assert "None" not in prompt
+    assert "False" not in prompt
+    assert "\nnull\n" in prompt
+    assert "\nfalse\n" in prompt
+    assert "<function=murmel>" in prompt
+    assert "<tool_response>\n\n</tool_response>" in prompt
