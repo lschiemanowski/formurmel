@@ -1,0 +1,5 @@
+{
+  "statement": "A metric space with extended diameter `0` consists of a single element.",
+  "lean_statement": "theorem subsingleton_of_ediam_univ_eq_zero\n    {X : Type*} [MetricSpace X]\n    (h : Metric.ediam (Set.univ : Set X) = 0) :\n    Subsingleton X",
+  "proof": "Proof: by `Metric.ediam_eq_zero_iff`, a set has extended diameter `0` if and only if it is a\nsubsingleton. Applying this to `Set.univ` shows that `Set.univ` is a subsingleton set, so every two\nelements of `X` are equal. Hence `X` is a subsingleton."
+}

@@ -1,0 +1,5 @@
+{
+  "statement": "If `f` is nilpotent, then `1 - f` is a unit (equivalently, `id - f` is invertible).",
+  "lean_statement": "theorem isUnit_one_sub_of_isNilpotent\n    {K V : Type*} [CommRing K] [AddCommGroup V] [Module K V]\n    (f : Module.End K V) (hf : IsNilpotent f) :\n    IsUnit (1 - f)",
+  "proof": "Proof: since `f` is nilpotent, there is some `n` with `f ^ n = 0`. Consider the finite geometric\nseries `S := 1 + f + f ^ 2 + ... + f ^ (n - 1)`. Then\n`(1 - f) * S = 1 - f ^ n = 1` (all intermediate terms cancel), and similarly `S * (1 - f) = 1`.\nThus `S` is an inverse for `1 - f`, so `1 - f` is a unit."
+}

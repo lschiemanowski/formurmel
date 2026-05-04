@@ -1,0 +1,5 @@
+{
+  "statement": "A diagonal matrix over a field is nilpotent only if it is the zero matrix.",
+  "lean_statement": "theorem diagonal_nilpotent_eq_zero\n    {K : Type*} [Field K] {n : Type*} [Fintype n] [DecidableEq n]\n    (d : n → K)\n    (h : IsNilpotent (Matrix.diagonal d)) :\n    Matrix.diagonal d = 0",
+  "proof": "Proof: if `D = Matrix.diagonal d` is nilpotent, then `D ^ m = 0` for some `m`. But powers of a\ndiagonal matrix are computed entrywise: `D ^ m = Matrix.diagonal (fun i => (d i) ^ m)`. Hence\n`(d i) ^ m = 0` for every `i`. Over a field the only nilpotent element is `0`, so each `d i = 0`,\nand therefore `D = 0`."
+}

@@ -25,6 +25,7 @@ KB proof format:
   ```
 - Do not store bare tactic text such as `exact ...`, `intro h; ...`, or `by_contra h; ...` unless it is wrapped as a complete proof term.
 - Before updating `lean_proof`, test the complete theorem shape with `lean`: `theorem ... := <lean_proof>`.
+- `compiles` and `verified` are read-only status fields. They are updated only by `kb.compile_node`; do not try to set them directly.
 
 Lean conventions:
 

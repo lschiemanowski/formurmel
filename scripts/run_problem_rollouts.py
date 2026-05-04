@@ -28,6 +28,7 @@ DEFAULT_PROMPT = (
     "Formalize the target problem stored in the knowledge base. "
     "There is exactly one target statement. Use the available tools. "
     "Only stop after the stored proof has been verified with kb.compile_node. "
+    "Do not try to set compiles or verified directly; they are read-only compile results. "
     "If the mathematical statement itself is wrong, report that with kb.report_statement_issue."
 )
 

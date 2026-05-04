@@ -132,7 +132,16 @@ class KB:
         node = self.get_node(node_id)
         if node.write_protected:
             raise KBError(f"Node '{node_id}' is write-protected")
-        disallowed = {"id", "type", "write_protected", "statement_write_protected", "proof_write_protected"}
+        disallowed = {
+            "id",
+            "type",
+            "write_protected",
+            "statement_write_protected",
+            "proof_write_protected",
+            "compiles",
+            "error",
+            "verified",
+        }
         statement_fields = {"natural_language", "lean_name", "lean"}
         proof_fields = {"natural_language_proof", "lean_proof"}
         updated_fields: set[str] = set()
@@ -352,8 +361,8 @@ class KB:
         compilation = self._compile_lean_source(lean_source, include_source=include_source)
         node.compiles = compilation["success"]
         node.error = None if compilation["success"] else compilation["error"]
-        if node.type == NodeType.STATEMENT and node.lean_proof is not None:
-            node.verified = compilation["success"]
+        if node.type == NodeType.STATEMENT:
+            node.verified = compilation["success"] if node.lean_proof is not None else None
         return compilation
 
     def compile_candidate(self, id: str, *, lean_name: str | None = None, lean: str | None = None, lean_proof: str | None = None, include_source: bool = False) -> dict[str, Any]:
@@ -377,7 +386,7 @@ class KB:
                 "issue_kind": node.issue_kind,
             }
             statements.append(entry)
-            if node.verified:
+            if node.verified and node.lean_proof is not None:
                 solved_statement_ids.append(node.id)
             elif node.issue_kind is not None:
                 issue_reported_ids.append(node.id)

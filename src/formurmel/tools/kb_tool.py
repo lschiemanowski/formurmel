@@ -34,11 +34,8 @@ _ADD_NODE_OPTIONAL_FIELDS = {
     "write_protected",
     "statement_write_protected",
     "proof_write_protected",
-    "compiles",
-    "error",
     "natural_language_proof",
     "lean_proof",
-    "verified",
     "issue_kind",
     "issue_explanation",
     "issue_confidence",
@@ -49,11 +46,8 @@ _UPDATE_NODE_MUTABLE_FIELDS = {
     "natural_language",
     "lean_name",
     "lean",
-    "compiles",
-    "error",
     "natural_language_proof",
     "lean_proof",
-    "verified",
     "issue_kind",
     "issue_explanation",
     "issue_confidence",
@@ -272,9 +266,6 @@ class KBTool(Tool):
                     "write_protected": {"type": "boolean"},
                     "statement_write_protected": {"type": "boolean"},
                     "proof_write_protected": {"type": "boolean"},
-                    "compiles": {"type": ["boolean", "null"]},
-                    "verified": {"type": ["boolean", "null"]},
-                    "error": {"type": ["string", "null"]},
                     "issue_kind": {"type": ["string", "null"]},
                     "issue_explanation": {"type": ["string", "null"]},
                     "issue_confidence": {"type": ["number", "null"]},
@@ -440,9 +431,6 @@ class KBTool(Tool):
             if field in {"write_protected", "statement_write_protected", "proof_write_protected"}:
                 if not isinstance(value, bool):
                     raise KBError(f"kb add_node field '{field}' must be a boolean")
-            elif field in {"compiles", "verified"}:
-                if value is not None and not isinstance(value, bool):
-                    raise KBError(f"kb add_node field '{field}' must be a boolean or null")
             elif field == "issue_confidence":
                 if value is not None:
                     if isinstance(value, bool) or not isinstance(value, (int, float)):
@@ -478,9 +466,6 @@ class KBTool(Tool):
                 if not isinstance(value, str) or not value.strip():
                     raise KBError("kb update_node field 'natural_language' must be a non-empty string")
                 fields[field] = value.strip()
-            elif field in {"compiles", "verified"}:
-                if value is not None and not isinstance(value, bool):
-                    raise KBError(f"kb update_node field '{field}' must be a boolean or null")
             elif field == "issue_confidence":
                 if value is not None:
                     if isinstance(value, bool) or not isinstance(value, (int, float)):
