@@ -10,7 +10,7 @@ except ModuleNotFoundError:  # pragma: no cover
     import tomli as tomllib
 
 
-_SUPPORTED_BACKENDS = {"qwen35_llama_cpp"}
+_SUPPORTED_BACKENDS = {"deepseek", "openrouter", "qwen35_llama_cpp"}
 
 
 @dataclass(frozen=True)
@@ -18,6 +18,15 @@ class BackendConfig:
     type: str = "qwen35_llama_cpp"
     llama_base_url: str = "http://localhost:8080"
     qwen35_enable_thinking: bool = True
+    api_base_url: str | None = None
+    api_key_env: str | None = None
+    model: str | None = None
+    reasoning_enabled: bool | None = None
+    reasoning_effort: str | None = None
+    reasoning_max_tokens: int | None = None
+    reasoning_exclude: bool = False
+    openrouter_site_url: str | None = None
+    openrouter_app_name: str | None = None
     temperature: float | None = None
     top_p: float | None = None
     presence_penalty: float | None = None
@@ -81,6 +90,14 @@ def _as_optional_str(value: Any, name: str) -> str | None:
 def _as_bool(value: Any, name: str, *, default: bool) -> bool:
     if value is None:
         return default
+    if not isinstance(value, bool):
+        raise ValueError(f"{name} must be a boolean")
+    return value
+
+
+def _as_optional_bool(value: Any, name: str) -> bool | None:
+    if value is None:
+        return None
     if not isinstance(value, bool):
         raise ValueError(f"{name} must be a boolean")
     return value
@@ -162,6 +179,28 @@ def load_config(path: str | Path) -> AppConfig:
             "backend.qwen35_enable_thinking",
             default=True,
         ),
+        api_base_url=_as_optional_str(backend_raw.get("api_base_url"), "backend.api_base_url"),
+        api_key_env=_as_optional_str(backend_raw.get("api_key_env"), "backend.api_key_env"),
+        model=_as_optional_str(backend_raw.get("model"), "backend.model"),
+        reasoning_enabled=_as_optional_bool(backend_raw.get("reasoning_enabled"), "backend.reasoning_enabled"),
+        reasoning_effort=_as_optional_str(backend_raw.get("reasoning_effort"), "backend.reasoning_effort"),
+        reasoning_max_tokens=_as_optional_int(
+            backend_raw.get("reasoning_max_tokens"),
+            "backend.reasoning_max_tokens",
+        ),
+        reasoning_exclude=_as_bool(
+            backend_raw.get("reasoning_exclude"),
+            "backend.reasoning_exclude",
+            default=False,
+        ),
+        openrouter_site_url=_as_optional_str(
+            backend_raw.get("openrouter_site_url"),
+            "backend.openrouter_site_url",
+        ),
+        openrouter_app_name=_as_optional_str(
+            backend_raw.get("openrouter_app_name"),
+            "backend.openrouter_app_name",
+        ),
         temperature=_as_optional_float(backend_raw.get("temperature"), "backend.temperature"),
         top_p=_as_optional_float(backend_raw.get("top_p"), "backend.top_p"),
         presence_penalty=_as_optional_float(
@@ -235,6 +274,28 @@ def load_config(path: str | Path) -> AppConfig:
         raise ValueError("backend.retry_cooldown_seconds must be non-negative")
     if backend.parse_retries < 0:
         raise ValueError("backend.parse_retries must be non-negative")
+    if backend.type == "openrouter" and (backend.model is None or not backend.model.strip()):
+        raise ValueError("backend.model must be set for openrouter")
+    if backend.api_base_url is not None and not backend.api_base_url.strip():
+        raise ValueError("backend.api_base_url must be a non-empty string")
+    if backend.api_key_env is not None and not backend.api_key_env.strip():
+        raise ValueError("backend.api_key_env must be a non-empty string")
+    if backend.model is not None and not backend.model.strip():
+        raise ValueError("backend.model must be a non-empty string")
+    if backend.reasoning_effort is not None and not backend.reasoning_effort.strip():
+        raise ValueError("backend.reasoning_effort must be a non-empty string")
+    if backend.reasoning_max_tokens is not None and backend.reasoning_max_tokens <= 0:
+        raise ValueError("backend.reasoning_max_tokens must be positive")
+    if (
+        backend.type == "openrouter"
+        and backend.reasoning_effort is not None
+        and backend.reasoning_max_tokens is not None
+    ):
+        raise ValueError("openrouter supports either reasoning_effort or reasoning_max_tokens, not both")
+    if backend.openrouter_site_url is not None and not backend.openrouter_site_url.strip():
+        raise ValueError("backend.openrouter_site_url must be a non-empty string")
+    if backend.openrouter_app_name is not None and not backend.openrouter_app_name.strip():
+        raise ValueError("backend.openrouter_app_name must be a non-empty string")
     if tools.murmel_semantic_device is not None and not tools.murmel_semantic_device.strip():
         raise ValueError("tools.murmel_semantic_device must be a non-empty string")
     if tools.murmel_semantic_score_chunk_size <= 0:

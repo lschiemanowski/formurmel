@@ -3,9 +3,10 @@ from __future__ import annotations
 from pathlib import Path
 
 from formurmel.config import load_config
+from formurmel.llm.hosted_chat import DeepSeekChatCompletionBackend, OpenRouterChatCompletionBackend
 from formurmel.llm.qwen35_llama_cpp import Qwen35LlamaCppCompletionBackend
-from formurmel.message import MessageType
-from formurmel.runtime import build_tool_registry
+from formurmel.message import Conversation, Message, MessageType, Role, ToolCall, ToolResponse
+from formurmel.runtime import build_backend, build_tool_registry
 
 
 def test_config_loads_murmel_and_qwen_runtime_surface(tmp_path: Path) -> None:
@@ -75,6 +76,55 @@ system_prompt_path = "system.md"
     assert config.tools.murmel_semantic_device == "cpu"
 
 
+def test_config_loads_openrouter_backend_surface(tmp_path: Path) -> None:
+    config_path = tmp_path / "formurmel.toml"
+    config_path.write_text(
+        """
+[backend]
+type = "openrouter"
+model = "deepseek/deepseek-r1"
+api_key_env = "TEST_OPENROUTER_KEY"
+reasoning_enabled = true
+reasoning_effort = "high"
+openrouter_site_url = "https://example.invalid"
+openrouter_app_name = "formurmel-test"
+
+[agent]
+system_prompt = "system"
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    config = load_config(config_path)
+    backend = build_backend(config.backend)
+
+    assert isinstance(backend, OpenRouterChatCompletionBackend)
+    assert backend.model == "deepseek/deepseek-r1"
+    assert backend.api_key_env == "TEST_OPENROUTER_KEY"
+    assert backend.reasoning_enabled is True
+    assert backend.reasoning_effort == "high"
+
+
+def test_openrouter_config_requires_model(tmp_path: Path) -> None:
+    config_path = tmp_path / "formurmel.toml"
+    config_path.write_text(
+        """
+[backend]
+type = "openrouter"
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    try:
+        load_config(config_path)
+    except ValueError as exc:
+        assert "backend.model must be set for openrouter" in str(exc)
+    else:  # pragma: no cover
+        raise AssertionError("expected openrouter config without model to fail")
+
+
 def test_qwen_parser_accepts_murmel_tool_call() -> None:
     backend = Qwen35LlamaCppCompletionBackend(base_url="http://localhost:8080")
     messages = backend._parse_completion(
@@ -104,6 +154,91 @@ commutativity of addition on naturals
     assert messages[1].content.name == "murmel"
     assert messages[1].content.arguments["action"] == "search"
     assert messages[1].content.arguments["mode"] == "semantic"
+
+
+def test_deepseek_payload_preserves_reasoning_for_tool_call_turns() -> None:
+    backend = DeepSeekChatCompletionBackend(
+        api_key_env="TEST_DEEPSEEK_KEY",
+        temperature=0.7,
+        max_tokens=1024,
+    )
+    conversation = Conversation(
+        messages=[
+            Message(role=Role.USER, content="question"),
+            Message(role=Role.ASSISTANT, content="need the tool", msg_type=MessageType.REASONING),
+            Message(
+                role=Role.ASSISTANT,
+                content=ToolCall(id="call_1", name="murmel", arguments={"query": "Nat.add_comm"}),
+            ),
+            Message(
+                role=Role.TOOL,
+                content=ToolResponse(id="call_1", name="murmel", content="search result"),
+            ),
+        ]
+    )
+
+    payload = backend._build_payload(conversation, [])
+    assistant_payload = payload["messages"][1]
+
+    assert payload["thinking"] == {"type": "enabled"}
+    assert payload["reasoning_effort"] == "high"
+    assert payload["max_tokens"] == 1024
+    assert "temperature" not in payload
+    assert assistant_payload["reasoning_content"] == "need the tool"
+    assert assistant_payload["tool_calls"][0]["function"]["name"] == "murmel"
+
+
+def test_openrouter_reasoning_details_become_reasoning_and_are_preserved() -> None:
+    backend = OpenRouterChatCompletionBackend(
+        model="deepseek/deepseek-r1",
+        api_key_env="TEST_OPENROUTER_KEY",
+        reasoning_enabled=True,
+    )
+    assistant_messages = backend._parse_assistant_message(
+        {
+            "role": "assistant",
+            "content": "final",
+            "reasoning_details": [
+                {
+                    "type": "reasoning.text",
+                    "text": "structured thought",
+                    "id": "reasoning-text-1",
+                    "index": 0,
+                }
+            ],
+        }
+    )
+    conversation = Conversation(messages=[Message(role=Role.USER, content="question"), *assistant_messages])
+
+    rendered = backend._conversation_messages(conversation)
+
+    assert assistant_messages[0].msg_type == MessageType.REASONING
+    assert assistant_messages[0].content == "structured thought"
+    assert assistant_messages[0].provider_state == {
+        "reasoning_details": [
+            {
+                "type": "reasoning.text",
+                "text": "structured thought",
+                "id": "reasoning-text-1",
+                "index": 0,
+            }
+        ]
+    }
+    assert rendered[1]["reasoning"] == "structured thought"
+    assert rendered[1]["reasoning_details"][0]["text"] == "structured thought"
+
+
+def test_openrouter_payload_uses_unified_reasoning_object() -> None:
+    backend = OpenRouterChatCompletionBackend(
+        model="anthropic/claude-sonnet-4.5",
+        api_key_env="TEST_OPENROUTER_KEY",
+        reasoning_max_tokens=2048,
+        app_name="formurmel-test",
+    )
+    payload = backend._build_payload(Conversation(messages=[Message(role=Role.USER, content="question")]), [])
+
+    assert payload["model"] == "anthropic/claude-sonnet-4.5"
+    assert payload["reasoning"] == {"max_tokens": 2048, "exclude": False}
 
 
 def test_qwen_prompt_renderer_does_not_render_none_message_content() -> None:

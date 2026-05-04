@@ -27,6 +27,32 @@ transcript_path = "runs/latest_transcript.json"
 max_steps = 120
 ```
 
+Hosted backend examples:
+
+```toml
+[backend]
+type = "deepseek"
+model = "deepseek-v4-pro"
+api_key_env = "DEEPSEEK_API_KEY"
+reasoning_enabled = true
+reasoning_effort = "high"
+max_tokens = 4096
+```
+
+```toml
+[backend]
+type = "openrouter"
+model = "deepseek/deepseek-r1"
+api_key_env = "OPENROUTER_API_KEY"
+reasoning_enabled = true
+reasoning_effort = "high"
+max_tokens = 4096
+```
+
+DeepSeek reasoning is read from `reasoning_content`. OpenRouter reasoning is
+read from `reasoning` when present, and structured `reasoning_details` blocks
+are preserved in transcripts and passed back on later turns.
+
 Run:
 
 ```bash

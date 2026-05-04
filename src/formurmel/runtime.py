@@ -3,6 +3,7 @@ from __future__ import annotations
 from formurmel.agent import AgentRunResult, build_initial_conversation, run
 from formurmel.config import AgentConfig, AppConfig, BackendConfig, ToolsConfig
 from formurmel.llm.base import LLMBackend
+from formurmel.llm.hosted_chat import DeepSeekChatCompletionBackend, OpenRouterChatCompletionBackend
 from formurmel.llm.qwen35_llama_cpp import Qwen35LlamaCppCompletionBackend
 from formurmel.logging import ConsoleLogger, Logger, NullLogger
 from formurmel.tools.base import ToolRegistry
@@ -22,6 +23,42 @@ def build_backend(config: BackendConfig) -> LLMBackend:
             retry_cooldown_seconds=config.retry_cooldown_seconds,
             parse_retries=config.parse_retries,
             enable_thinking=config.qwen35_enable_thinking,
+            debug=config.debug,
+        )
+    if config.type == "deepseek":
+        return DeepSeekChatCompletionBackend(
+            base_url=config.api_base_url or "https://api.deepseek.com",
+            model=config.model or "deepseek-v4-pro",
+            api_key_env=config.api_key_env or "DEEPSEEK_API_KEY",
+            reasoning_enabled=True if config.reasoning_enabled is None else config.reasoning_enabled,
+            reasoning_effort=config.reasoning_effort or "high",
+            temperature=config.temperature,
+            top_p=config.top_p,
+            presence_penalty=config.presence_penalty,
+            max_tokens=config.max_tokens,
+            timeout=config.timeout,
+            retries=config.retries,
+            retry_cooldown_seconds=config.retry_cooldown_seconds,
+            debug=config.debug,
+        )
+    if config.type == "openrouter":
+        return OpenRouterChatCompletionBackend(
+            base_url=config.api_base_url or "https://openrouter.ai/api/v1",
+            model=config.model or "",
+            api_key_env=config.api_key_env or "OPENROUTER_API_KEY",
+            reasoning_enabled=config.reasoning_enabled,
+            reasoning_effort=config.reasoning_effort,
+            reasoning_max_tokens=config.reasoning_max_tokens,
+            reasoning_exclude=config.reasoning_exclude,
+            site_url=config.openrouter_site_url,
+            app_name=config.openrouter_app_name,
+            temperature=config.temperature,
+            top_p=config.top_p,
+            presence_penalty=config.presence_penalty,
+            max_tokens=config.max_tokens,
+            timeout=config.timeout,
+            retries=config.retries,
+            retry_cooldown_seconds=config.retry_cooldown_seconds,
             debug=config.debug,
         )
     raise ValueError(f"unsupported backend type: {config.type}")

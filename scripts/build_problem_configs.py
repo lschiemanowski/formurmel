@@ -78,7 +78,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--backend",
         default="qwen35_llama_cpp",
-        choices=("qwen35_llama_cpp",),
+        choices=("deepseek", "openrouter", "qwen35_llama_cpp"),
         help="Backend type written into generated configs. Default: qwen35_llama_cpp.",
     )
     parser.add_argument(
@@ -86,6 +86,35 @@ def parse_args() -> argparse.Namespace:
         default="http://localhost:8080",
         help="llama.cpp /completion server base URL written into configs.",
     )
+    parser.add_argument("--model", help="Hosted backend model name written into configs.")
+    parser.add_argument("--api-base-url", help="Hosted backend API base URL written into configs.")
+    parser.add_argument("--api-key-env", help="Hosted backend API key environment variable.")
+    parser.add_argument(
+        "--enable-reasoning",
+        dest="reasoning_enabled",
+        action="store_true",
+        default=None,
+        help="Write reasoning_enabled = true for hosted backends.",
+    )
+    parser.add_argument(
+        "--disable-reasoning",
+        dest="reasoning_enabled",
+        action="store_false",
+        help="Write reasoning_enabled = false for hosted backends.",
+    )
+    parser.add_argument("--reasoning-effort", help="Hosted backend reasoning effort.")
+    parser.add_argument(
+        "--reasoning-max-tokens",
+        type=int,
+        help="OpenRouter reasoning token budget written into configs.",
+    )
+    parser.add_argument(
+        "--reasoning-exclude",
+        action="store_true",
+        help="Write reasoning_exclude = true for OpenRouter configs.",
+    )
+    parser.add_argument("--openrouter-site-url", help="Optional OpenRouter HTTP-Referer header value.")
+    parser.add_argument("--openrouter-app-name", help="Optional OpenRouter X-Title header value.")
     parser.add_argument(
         "--disable-thinking",
         action="store_true",
@@ -290,12 +319,38 @@ def build_backend_lines(args: argparse.Namespace) -> list[str]:
     lines = [
         "[backend]",
         f"type = {quote_toml_string(args.backend)}",
-        f"llama_base_url = {quote_toml_string(args.llama_base_url)}",
-        f"qwen35_enable_thinking = {'false' if args.disable_thinking else 'true'}",
-        f"temperature = {args.temperature}",
         f"timeout = {args.backend_timeout}",
         f"retries = {args.backend_retries}",
     ]
+    if args.backend == "qwen35_llama_cpp":
+        lines.extend(
+            [
+                f"llama_base_url = {quote_toml_string(args.llama_base_url)}",
+                f"qwen35_enable_thinking = {'false' if args.disable_thinking else 'true'}",
+                f"temperature = {args.temperature}",
+            ]
+        )
+    else:
+        if args.model is not None:
+            lines.append(f"model = {quote_toml_string(args.model)}")
+        if args.api_base_url is not None:
+            lines.append(f"api_base_url = {quote_toml_string(args.api_base_url)}")
+        if args.api_key_env is not None:
+            lines.append(f"api_key_env = {quote_toml_string(args.api_key_env)}")
+        if args.reasoning_enabled is not None:
+            lines.append(f"reasoning_enabled = {'true' if args.reasoning_enabled else 'false'}")
+        if args.reasoning_effort is not None:
+            lines.append(f"reasoning_effort = {quote_toml_string(args.reasoning_effort)}")
+        if args.reasoning_max_tokens is not None:
+            lines.append(f"reasoning_max_tokens = {args.reasoning_max_tokens}")
+        if args.reasoning_exclude:
+            lines.append("reasoning_exclude = true")
+        if args.openrouter_site_url is not None:
+            lines.append(f"openrouter_site_url = {quote_toml_string(args.openrouter_site_url)}")
+        if args.openrouter_app_name is not None:
+            lines.append(f"openrouter_app_name = {quote_toml_string(args.openrouter_app_name)}")
+        if args.temperature is not None:
+            lines.append(f"temperature = {args.temperature}")
     if args.top_p is not None:
         lines.append(f"top_p = {args.top_p}")
     if args.presence_penalty is not None:
@@ -393,6 +448,24 @@ def validate_args(args: argparse.Namespace) -> None:
         raise SystemExit("--backend-timeout must be positive")
     if args.backend_retries <= 0:
         raise SystemExit("--backend-retries must be positive")
+    if args.backend == "openrouter" and (args.model is None or not args.model.strip()):
+        raise SystemExit("--model is required for --backend openrouter")
+    if args.api_base_url is not None and not args.api_base_url.strip():
+        raise SystemExit("--api-base-url must be non-empty")
+    if args.api_key_env is not None and not args.api_key_env.strip():
+        raise SystemExit("--api-key-env must be non-empty")
+    if args.model is not None and not args.model.strip():
+        raise SystemExit("--model must be non-empty")
+    if args.reasoning_effort is not None and not args.reasoning_effort.strip():
+        raise SystemExit("--reasoning-effort must be non-empty")
+    if args.reasoning_max_tokens is not None and args.reasoning_max_tokens <= 0:
+        raise SystemExit("--reasoning-max-tokens must be positive")
+    if args.backend == "openrouter" and args.reasoning_effort is not None and args.reasoning_max_tokens is not None:
+        raise SystemExit("--reasoning-effort and --reasoning-max-tokens are mutually exclusive for OpenRouter")
+    if args.openrouter_site_url is not None and not args.openrouter_site_url.strip():
+        raise SystemExit("--openrouter-site-url must be non-empty")
+    if args.openrouter_app_name is not None and not args.openrouter_app_name.strip():
+        raise SystemExit("--openrouter-app-name must be non-empty")
     if args.temperature < 0:
         raise SystemExit("--temperature must be non-negative")
     if args.top_p is not None and not (0 < args.top_p <= 1):
