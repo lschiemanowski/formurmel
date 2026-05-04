@@ -1,132 +1,166 @@
 # formurmel
 
-A Lean formalization agent runtime that reuses the cleaner-style agent loop while replacing the old mathlib search tools with one `murmel` tool.
+`formurmel` is a Lean 4 formalization agent runtime. It runs a tool-using LLM
+against mathlib, with `murmel` as the mathlib search/inspection interface, a
+Lean checker for candidate snippets, and an optional mutable knowledge base for
+problem state.
 
-This first pass intentionally keeps the surface small:
+The package is intentionally an agent runtime, not a training framework. It
+provides:
 
-- one backend: local llama.cpp `/completion` with Qwen 3.5 formatting
-- tools: `murmel`, `lean`, and optional `kb`
-- no training code and no port of the older `mlsearch`/`nlmlsearch` tools
+- a CLI for running one formalization task;
+- a diagnosis CLI for inspecting a failed transcript;
+- a reusable Python episode API for rollout/training code;
+- dataset helper scripts that generate per-problem configs and run repeated
+  rollouts.
 
-Example `formurmel.toml`:
+## Agent Semantics
 
-```toml
-[backend]
-type = "qwen35_llama_cpp"
-llama_base_url = "http://localhost:8080"
-temperature = 0.2
-max_tokens = 4096
+A normal run starts from a system prompt and one user prompt. The runtime builds
+the configured backend and tool registry, sends the conversation plus tool specs
+to the model, executes any tool calls the model returns, appends tool responses,
+and repeats until one of these conditions occurs:
 
-[tools]
-murmel_cache_dir = "../murmel/.murmel-cache"
-lean_lake_project = "../mathlib4"
+- the assistant returns a non-empty user-facing message with no tool call;
+- the backend query fails;
+- the assistant returns an invalid tool-call message;
+- the assistant returns neither a tool call nor a final message;
+- `agent.max_steps` is reached.
 
-[agent]
-system_prompt_path = "prompts/system_prompt.md"
-transcript_path = "runs/latest_transcript.json"
-max_steps = 120
-```
+Run status is `done` only when the assistant has produced a final message and
+the configured completion checks pass. If a KB tool is configured, the runtime
+also checks the KB completion state before accepting a final message; a run that
+stops while statement nodes are still pending is reported as `error`.
 
-Hosted backend examples:
+The transcript writer records the final status, step count, error text if any,
+final assistant message, and the full conversation including reasoning messages,
+tool calls, and tool responses.
 
-```toml
-[backend]
-type = "deepseek"
-model = "deepseek-v4-pro"
-api_key_env = "DEEPSEEK_API_KEY"
-reasoning_enabled = true
-reasoning_effort = "high"
-max_tokens = 4096
-```
+## Tools
 
-```toml
-[backend]
-type = "openrouter"
-model = "deepseek/deepseek-r1"
-api_key_env = "OPENROUTER_API_KEY"
-reasoning_enabled = true
-reasoning_effort = "high"
-max_tokens = 4096
-```
+The normal tool registry contains these tools:
 
-DeepSeek reasoning is read from `reasoning_content`. OpenRouter reasoning is
-read from `reasoning` when present, and structured `reasoning_details` blocks
-are preserved in transcripts and passed back on later turns.
+- `murmel`: searches and inspects mathlib declarations. It supports semantic
+  search, lexical search, source display, and natural-language declaration
+  descriptions. Semantic search defaults to CPU unless configured otherwise.
+- `lean`: runs a self-contained Lean snippet through `lake env lean` in the
+  configured Lake project. The tool reports failure when the snippet or Lean
+  output indicates `sorry` or `admit`.
+- `kb`: optional. When `tools.kb_path` is set, this tool loads or creates a JSON
+  knowledge base, lets the model inspect and update definition/statement nodes,
+  checks KB-local candidates, and stores compile/verification state.
 
-Run:
+Diagnosis mode reuses the configured backend and normal tools, adds a read-only
+`transcript_inspect` tool for the failed transcript, and asks the model to emit
+a structured failure diagnosis.
 
-```bash
-PYTHONPATH=src:../murmel/src python -m formurmel --config formurmel.toml --prompt "Formalize ..."
-```
+## Backends
 
-Diagnose a failed run:
+Supported backend types are:
 
-```bash
-PYTHONPATH=src:../murmel/src python -m formurmel diagnose \
-  --config runs/basic_validation_qwen35/configs/basic_problems/validation/problem_54.agent.toml \
-  --failed-transcript runs/basic_validation_qwen35/transcripts/basic_problems/validation/problem_54.transcript.json \
-  --output runs/basic_validation_qwen35/diagnoses/problem_54.diagnosis.json
-```
+- `qwen35_llama_cpp`: talks to a local llama.cpp `/completion` server using the
+  Qwen 3.5 formatting expected by this repo.
+- `deepseek`: talks to the DeepSeek chat-completions API. By default it uses
+  `DEEPSEEK_API_KEY`, `deepseek-v4-pro`, and high-effort reasoning.
+- `openrouter`: talks to the OpenRouter chat-completions API. `backend.model`
+  must be set, and the API key defaults to `OPENROUTER_API_KEY`.
 
-Diagnosis mode reuses the configured backend plus normal tools, adds a read-only
-`transcript_inspect` tool for the failed transcript, and asks the model for a
-structured JSON diagnosis of what failed and how to avoid the failure mode. The
-diagnosis agent transcript is written next to the failed transcript by default
-as `*.diagnosis.transcript.json`.
+Hosted reasoning content is preserved in transcripts. For OpenRouter, structured
+`reasoning_details` blocks are also passed back on later turns when present.
 
-Generate per-problem configs from copied datasets:
+## Configuration
+
+Configuration is TOML with three top-level tables:
+
+- `[backend]` selects the LLM backend and request parameters such as model,
+  endpoint, temperature, token budget, retry settings, and reasoning options.
+- `[tools]` selects paths for the KB, Lake projects, murmel cache/config, mathlib
+  revision, semantic-search device, and Lean timeout.
+- `[agent]` selects the system prompt, transcript path, verbosity, and maximum
+  number of model-query steps.
+
+Relative paths in a config file are resolved relative to that config file, not
+relative to the current shell directory.
+
+## Python Episode API
+
+Training and rollout code should use `AgentEpisodeRunner` instead of shelling
+out to the CLI. A runner keeps the backend and non-KB tools alive across
+episodes. Each episode gets a shallow-cloned tool registry and, when a KB path
+is provided, a fresh KB tool for that episode. Use one runner per rollout
+worker/thread.
+
+## Batch Helpers
+
+`scripts/build_problem_configs.py` reads dataset files under
+`datasets/<dataset>/lean_dataset_json/<split>/` and writes one `.agent.toml` and
+one `.kb.json` per problem under `runs/<run-name>/configs/...`.
+
+`scripts/run_problem_rollouts.py` runs repeated episodes for generated configs,
+writes per-sample artifacts under `runs/<run-name>/rollouts/...`, and appends
+one JSONL record per rollout to `runs/<run-name>/rollout_summary.jsonl`.
+
+For judging a rollout, prefer the KB artifact over the high-level agent status:
+the useful success signal is that the target statement was compiled and marked
+verified in the sample's `kb.json`.
+
+## Example: Run One Formalization Task
+
+The most direct way to run a dataset problem is to generate its KB/config pair
+and then run that generated config. This example uses `problem_1` from the
+`basic_problems` `validation_plus` split.
+
+First generate configs:
 
 ```bash
 python scripts/build_problem_configs.py \
   --dataset basic_problems \
-  --splits validation \
+  --splits validation_plus \
+  --run-name example \
   --murmel-cache-dir ../murmel/.murmel-cache \
   --lean-project ../cleaner/lean_env \
-  --run-name basic_validation_qwen35
+  --temperature 0.2 \
+  --max-tokens 4096 \
+  --max-steps 120
 ```
 
-This writes one `.agent.toml` and one `.kb.json` per problem under `runs/<run-name>/configs/...`.
-
-Run repeated rollouts for generated configs:
+Start a compatible llama.cpp server separately, then run one generated problem:
 
 ```bash
-PYTHONPATH=src:../murmel/src python scripts/run_problem_rollouts.py \
-  --run-dir runs/basic_train_eval_qwen35 \
-  --dataset basic_problems \
-  --split train \
-  --samples-per-problem 2 \
-  --max-turns 80 \
-  --jobs 1
+PYTHONPATH=src:../murmel/src python -m formurmel \
+  --config runs/example/configs/basic_problems/validation_plus/problem_1.agent.toml \
+  --prompt "Formalize the target problem stored in the knowledge base."
 ```
 
-This writes per-sample artifacts under `runs/<run-name>/rollouts/...` and appends
-one record per rollout to `runs/<run-name>/rollout_summary.jsonl`. The command
-assumes the configured llama.cpp server is already running. By default it keeps
-one live status line per problem, for example
-`problem_10: rollout 1: step 4, rollout 2: queued`; pass `--no-progress` to
-disable the in-place status display.
+The command prints the final assistant message, writes the full transcript to
+`runs/example/transcripts/basic_problems/validation_plus/problem_1.transcript.json`,
+and autosaves KB changes to
+`runs/example/configs/basic_problems/validation_plus/problem_1.kb.json`.
 
-## Python episode API
+To diagnose a failed transcript:
 
-Training code should call the agent through `AgentEpisodeRunner` instead of
-shelling out to the CLI or depending on low-level agent-loop details:
+```bash
+PYTHONPATH=src:../murmel/src python -m formurmel diagnose \
+  --config runs/example/configs/basic_problems/validation_plus/problem_1.agent.toml \
+  --failed-transcript runs/example/transcripts/basic_problems/validation_plus/problem_1.transcript.json \
+  --output runs/example/diagnoses/problem_1.diagnosis.json
+```
+
+To reuse the runtime from Python:
 
 ```python
 from formurmel import AgentEpisodeRunner, load_config
 
-template_config = load_config("runs/template.agent.toml")
-runner = AgentEpisodeRunner(template_config)
+config = load_config("runs/example/configs/basic_problems/validation_plus/problem_1.agent.toml")
+runner = AgentEpisodeRunner(config)
 
 episode = runner.run_episode(
     user_prompt="Formalize the target problem stored in the knowledge base.",
-    kb_path="outputs/run/rollouts/update_0001/problem_1/sample_00/kb.json",
-    transcript_path="outputs/run/rollouts/update_0001/problem_1/sample_00/transcript.json",
+    kb_path="runs/example/configs/basic_problems/validation_plus/problem_1.kb.json",
+    transcript_path="runs/example/transcripts/basic_problems/validation_plus/problem_1.transcript.json",
     max_steps=120,
 )
 
 print(episode.status, episode.steps, episode.error)
+runner.close()
 ```
-
-Use one runner per rollout worker/thread. The runner keeps the backend and
-non-KB tools such as `murmel` alive across episodes, while each episode gets a
-fresh `kb` tool pointed at that episode's KB path.
