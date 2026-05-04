@@ -1,0 +1,5 @@
+{
+  "statement": "Any two groups of order `3` are isomorphic.",
+  "lean_statement": "theorem iso_of_card_three\n    {G H : Type*} [Group G] [Fintype G] [Group H] [Fintype H]\n    (hG : Fintype.card G = 3) (hH : Fintype.card H = 3) :\n    Nonempty (G ≃* H)",
+  "proof": "Proof: since `3` is prime, any group of order `3` is cyclic: pick `g` not equal to `1`, then the\nsubgroup\n`⟨g⟩` has order dividing `3` and not equal to `1`, hence it has order `3` and equals the whole\ngroup. Thus both `G` and `H` are cyclic of order `3`. Choose generators `g` of `G` and `h` of `H`;\nthen the map sending `g^n` to `h^n` is a well-defined group isomorphism `G ≃* H`."
+}

@@ -1,0 +1,5 @@
+{
+  "statement": "Root test (absolute convergence): if `limsup ‖a (n+1)‖^(1/(n+1)) < 1`, then `∑ ‖a n‖` is summable.",
+  "lean_statement": "theorem summable_norm_of_limsup_root_lt_one\n    {E : Type*} [SeminormedAddCommGroup E]\n    (a : ℕ → E)\n    (h :\n      Filter.limsup\n          (fun n : ℕ =>\n            ENNReal.ofReal ((‖a (n + 1)‖ : ℝ) ^ (1 / (n + 1 : ℝ))))\n          atTop < 1) :\n    Summable (fun n => ‖a n‖)",
+  "proof": "Proof (root test): let `L` be the limsup of `‖a (n+1)‖^(1/(n+1))`. Choose `r` with `L < r < 1`.\nThen for all sufficiently large `n` we have `‖a (n+1)‖^(1/(n+1)) ≤ r`, hence\n`‖a (n+1)‖ ≤ r^(n+1)`. Therefore the tail of `∑ ‖a n‖` is bounded by a geometric series with ratio\n`r`, which converges. Hence `∑ ‖a n‖` is summable."
+}

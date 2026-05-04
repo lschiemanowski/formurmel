@@ -1,0 +1,5 @@
+{
+  "statement": "If `p` is an idempotent endomorphism (`p^2 = p`), then `V` is the direct sum of `ker p` and",
+  "lean_statement": "theorem isCompl_ker_range_of_idempotent\n    {K V : Type*} [CommSemiring K] [AddCommGroup V] [Module K V]\n    (p : Module.End K V) (hp : p ^ 2 = p) :\n    IsCompl (LinearMap.ker p) (LinearMap.range p)",
+  "proof": "`range p`.\n\nProof: first, `ker p ∩ range p = {0}`. Indeed, if `x = p y` and also `p x = 0`, then using\nidempotency we get `x = p y = p^2 y = p (p y) = p x = 0`.\n\nSecond, every `v` can be written as a sum of something in `ker p` and something in `range p`:\n`v = (v - p v) + p v`. Here `p v` is in `range p`, and\n`p (v - p v) = p v - p^2 v = p v - p v = 0`, so `v - p v` is in `ker p`.\nThus `V = ker p + range p`, and together with the trivial intersection this gives the direct sum."
+}

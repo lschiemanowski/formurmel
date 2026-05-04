@@ -1,0 +1,5 @@
+{
+  "statement": "If a linear endomorphism is nilpotent, then its trace is zero.",
+  "lean_statement": "theorem trace_nilpotent_eq_zero\n    {K V : Type*} [Field K] [AddCommGroup V] [Module K V] [FiniteDimensional K V]\n    (f : Module.End K V) (hf : IsNilpotent f) :\n    LinearMap.trace K V f = 0",
+  "proof": "Proof: choose `n` with `f ^ n = 0`. Consider the chain of subspaces\n`0 ⊆ ker f ⊆ ker (f^2) ⊆ ... ⊆ ker (f^n) = ⊤`. Pick a basis adapted to this flag (extend a basis of\n`ker (f^i)` to one of `ker (f^(i+1))` step by step). Then `f` sends `ker (f^i)` into `ker (f^(i-1))`,\nso in this basis the matrix of `f` is strictly upper triangular; in particular all diagonal entries\nare `0`. Hence its trace is `0`, and since trace does not depend on the chosen basis, `trace f = 0`."
+}

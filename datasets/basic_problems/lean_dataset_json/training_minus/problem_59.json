@@ -1,0 +1,5 @@
+{
+  "statement": "Eigenvectors are preserved by polynomial functional calculus.",
+  "lean_statement": "theorem aeval_apply_of_eigenvector\n    {K V : Type*} [Field K] [AddCommGroup V] [Module K V]\n    (f : Module.End K V) (v : V) (mu : K) (p : Polynomial K)\n    (hv : f v = mu • v) :\n    (Polynomial.aeval f p) v = (Polynomial.eval mu p) • v",
+  "proof": "Proof: first note that `f^n v = mu^n • v` for all `n`, proved by induction using `hv`. Thus for a\nmonomial we have `(aeval f (X^n)) v = f^n v = mu^n • v`, which matches `eval mu (X^n) • v`. By\nlinearity, the same holds for any polynomial `p`, giving\n`(Polynomial.aeval f p) v = (Polynomial.eval mu p) • v`."
+}

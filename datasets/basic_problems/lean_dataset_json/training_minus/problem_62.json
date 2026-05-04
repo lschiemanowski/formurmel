@@ -1,0 +1,5 @@
+{
+  "statement": "A group of order `p^k` with `k > 0` has nontrivial center.",
+  "lean_statement": "theorem exists_ne_one_mem_center_of_card_prime_pow\n    {G : Type*} [Group G] [Fintype G] {p k : Nat} (hp : Nat.Prime p)\n    (hk : k > 0) (hcard : Fintype.card G = p ^ k) :\n    ∃ g : G, g ≠ 1 ∧ g ∈ Subgroup.center G",
+  "proof": "Proof: apply the class equation:\n`|G| = |Z(G)| + ∑ [G : C_G(x)]` over representatives of noncentral conjugacy classes. Each index\n`[G : C_G(x)]` is the size of a conjugacy class and divides `|G| = p^k`, hence is a power of `p`\nand in particular is divisible by `p` whenever the class is nontrivial. Since `k > 0`, the prime\n`p` divides `|G|`. Therefore `|G| ≡ |Z(G)| (mod p)`, so `p` also divides `|Z(G)|`. It follows that\n`Z(G)` has more than one element. Thus there exists `g ≠ 1` with `g ∈ Z(G)`."
+}

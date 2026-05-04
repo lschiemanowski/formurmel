@@ -1,0 +1,5 @@
+{
+  "statement": "The radical of an ideal is the intersection of all prime ideals containing it.",
+  "lean_statement": "theorem radical_eq_sInf_primes\n    {R : Type*} [CommRing R] (I : Ideal R) :\n    Ideal.radical I = sInf { J : Ideal R | I ≤ J ∧ J.IsPrime }",
+  "proof": "Proof: let `P` be the set of prime ideals `J` with `I ≤ J`. First, if `x ∈ radical I`, then\n`x^n ∈ I` for some `n`. For any such prime `J`, we have `x^n ∈ J`, and prime ideals are radical, so\n`x ∈ J`. Hence `x` lies in `sInf P`, i.e. in the intersection of all primes containing `I`.\n\nConversely, if `x ∉ radical I`, then no power of `x` lies in `I`. Consider the multiplicative set\n`S = {1, x, x^2, ...}`. It is disjoint from `I`. A standard maximality argument shows there exists\nan ideal `J` containing `I` that is maximal among ideals disjoint from `S`; such a `J` is prime and\nstill disjoint from `S`, so in particular `x ∉ J`. Thus `x` is not in the intersection of all prime\nideals containing `I`. This proves equality."
+}

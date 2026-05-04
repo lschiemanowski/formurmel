@@ -1,0 +1,5 @@
+{
+  "statement": "A compact metric space is separable.",
+  "lean_statement": "theorem separableSpace_of_compact_metric\n    {X : Type*} [MetricSpace X] [CompactSpace X] :\n    TopologicalSpace.SeparableSpace X",
+  "proof": "Proof: for each `n ≥ 1`, cover `X` by the open balls of radius `1/n`. By compactness, there is a\nfinite subcover; let `F_n` be the finite set of chosen centers. Then `D = ⋃_n F_n` is countable.\nWe claim `D` is dense: given any nonempty open set `U`, pick `x ∈ U` and choose `n` such that the\nball `B(x, 1/n)` is contained in `U`. Since `F_n` covers `X` with radius `1/n` balls, some\n`y ∈ F_n` lies in `B(x, 1/n) ⊆ U`. Hence every nonempty open set meets `D`, so `X` is separable."
+}

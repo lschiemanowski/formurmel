@@ -1,0 +1,5 @@
+{
+  "statement": "If `∑ |a_n - a_{n+1}|` converges, then `a_n` converges.",
+  "lean_statement": "theorem tendsto_of_summable_abs_diff\n    (a : Nat → Real) (h : Summable (fun n => |a n - a (n + 1)|)) :\n    ∃ l : Real, Tendsto a atTop (nhds l)",
+  "proof": "Proof: for `m < n`, we can telescope:\n`a m - a n = (a m - a (m+1)) + (a (m+1) - a (m+2)) + ... + (a (n-1) - a n)`.\nTaking absolute values and using the triangle inequality gives\n`|a m - a n| ≤ ∑_{k=m}^{n-1} |a k - a (k+1)|`.\nSince `∑ |a k - a (k+1)|` converges, its tails go to `0`, so the right-hand side can be made\narbitrarily small for large `m,n`. Thus `(a n)` is Cauchy, and since `Real` is complete it\nconverges."
+}

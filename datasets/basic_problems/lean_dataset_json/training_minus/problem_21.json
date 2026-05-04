@@ -1,0 +1,5 @@
+{
+  "statement": "Every bounded monotone sequence of real numbers converges.",
+  "lean_statement": "theorem tendsto_of_monotone_bddAbove (u : ℕ → ℝ) (hu_mono : Monotone u) (hu_bdd : BddAbove (Set.range u)) :\n    ∃ l : ℝ, Filter.Tendsto u Filter.atTop (nhds l)",
+  "proof": "Proof: let `S = Set.range u`. Since `u` is bounded above, `S` is bounded above, and it is nonempty,\nso it has a least upper bound `l := sup S`. We claim `u` converges to `l`. Fix `eps > 0`. Then\n`l - eps` is\nnot an upper bound of `S`, so there exists `N` with `u N > l - eps`. By monotonicity, for all\n`n ≥ N` we have `u n ≥ u N > l - eps`, while always `u n ≤ l` since `l` is an upper bound. Thus for\n`n ≥ N` we get `|u n - l| < eps`, so `Tendsto u atTop (nhds l)`."
+}

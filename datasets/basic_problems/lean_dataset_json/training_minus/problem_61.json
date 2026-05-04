@@ -1,0 +1,5 @@
+{
+  "statement": "Every group of order `p^2` is abelian.",
+  "lean_statement": "theorem abelian_of_card_prime_sq\n    {G : Type*} [Group G] [Fintype G] {p : Nat} (hp : Nat.Prime p)\n    (hcard : Fintype.card G = p ^ 2) :\n    ∀ a b : G, a * b = b * a",
+  "proof": "Proof: let `|G| = p^2`. By the class equation, the center `Z(G)` has order divisible by `p` and is\nnontrivial. If `|Z(G)| = p^2` then `Z(G) = G` and `G` is abelian. Otherwise `|Z(G)| = p`. Then the\nquotient `G/Z(G)` has order `p`, hence is cyclic, and a group whose quotient by its center is cyclic\nis abelian. Therefore `G` is abelian."
+}

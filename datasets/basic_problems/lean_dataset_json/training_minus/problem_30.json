@@ -1,0 +1,5 @@
+{
+  "statement": "For a finite field of characteristic `p`, the Frobenius map `x ↦ x^p` is bijective.",
+  "lean_statement": "theorem frobenius_bijective_of_finite_field\n    {F : Type*} [Field F] [Finite F] {p : Nat} (hp : Nat.Prime p) [CharP F p] :\n    Function.Bijective (fun x : F => x ^ p)",
+  "proof": "Proof: first show injectivity. If `x^p = y^p`, then in characteristic `p` we have\n`(x - y)^p = x^p - y^p = 0` (all intermediate binomial coefficients are multiples of `p`).\nIn a field, `z^p = 0` implies `z = 0`, so `x - y = 0` and hence `x = y`. Thus Frobenius is\ninjective. Since `F` is finite, every injective map `F -> F` is automatically bijective."
+}

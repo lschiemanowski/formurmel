@@ -1,0 +1,5 @@
+{
+  "statement": "For a basis, surjectivity of `f` is equivalent to the images spanning the space.",
+  "lean_statement": "theorem surjective_iff_span_image_of_isBasis\n    {K V : Type*} [Field K] [AddCommGroup V] [Module K V]\n    {n : Nat} (v : Fin n → V)\n    (hv : LinearIndependent K v ∧ Submodule.span K (Set.range v) = ⊤)\n    (f : V →ₗ[K] V) :\n    Function.Surjective f ↔ Submodule.span K (Set.range (fun i => f (v i))) = ⊤",
+  "proof": "Proof: let `v i` be a basis. The range of `f` is a subspace of `V` and is spanned by the images of\nany spanning set: since every `x` is a linear combination of the `v i`, every `f x` is a linear\ncombination of the `f (v i)`. Thus `range f = span{f(v i)}`.\nTherefore `f` is surjective (i.e. `range f = ⊤`) iff `span{f(v i)} = ⊤`."
+}

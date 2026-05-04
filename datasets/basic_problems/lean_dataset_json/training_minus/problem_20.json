@@ -1,0 +1,5 @@
+{
+  "statement": "If a continuous function `f : ℝ → ℝ` vanishes on all rationals, then it vanishes everywhere.",
+  "lean_statement": "theorem eq_zero_of_eq_zero_on_rationals (f : ℝ → ℝ) (hf : Continuous f)\n    (hq : ∀ q : ℚ, f (q : ℝ) = 0) :\n    ∀ x : ℝ, f x = 0",
+  "proof": "Proof: given `x : ℝ`, choose a sequence of rationals `q_n → x` (using density of `ℚ`). Then\n`f q_n = 0` for all `n`, so by continuity `f x = lim f q_n = 0`."
+}
